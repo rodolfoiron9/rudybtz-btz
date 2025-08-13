@@ -4,7 +4,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Music, UserCircle, Map } from 'lucide-react';
+import { Menu, Music, UserCircle } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
@@ -42,7 +42,6 @@ export default function Header() {
             <nav className="flex flex-col gap-2">
                 <MobileNavLink href="/#albums" onOpenChange={setIsOpen}><Music className="w-5 h-5 text-accent"/>Albums</MobileNavLink>
                 <MobileNavLink href="/#bio" onOpenChange={setIsOpen}><UserCircle className="w-5 h-5 text-accent"/>Bio</MobileNavLink>
-                <MobileNavLink href="/#roadmap" onOpenChange={setIsOpen}><Map className="w-5 h-5 text-accent"/>Roadmap</MobileNavLink>
                 <div className="pt-4 mt-4 border-t border-white/10">
                     <Link href="/admin">
                          <Button variant="outline" className="w-full text-lg font-semibold border-accent text-accent hover:bg-accent hover:text-accent-foreground hover:shadow-[0_0_15px_hsl(var(--accent))] transition-shadow duration-300">
@@ -66,7 +65,6 @@ export default function Header() {
           <nav className="flex items-center gap-6">
             <NavLink href="/#albums">Albums</NavLink>
             <NavLink href="/#bio">Bio</NavLink>
-            <NavLink href="/#roadmap">Roadmap</NavLink>
             <Link href="/admin">
               <Button variant="outline" size="sm" className="transition-shadow duration-300 border-accent text-accent hover:bg-accent hover:text-accent-foreground hover:shadow-[0_0_15px_hsl(var(--accent))]">
                 Admin

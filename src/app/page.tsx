@@ -3,7 +3,6 @@ import BioSection from '@/components/bio-section';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
 import HeroSection from '@/components/hero-section';
-import RoadmapSection from '@/components/roadmap-section';
 
 export default function Home() {
   return (
@@ -18,9 +17,6 @@ export default function Home() {
           <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
           <div className="absolute inset-0 bg-gradient-to-b from-background to-transparent"></div>
           <BioSection />
-        </div>
-        <div id="roadmap" className="py-20 md:py-32">
-          <RoadmapSection />
         </div>
       </main>
       <Footer />
