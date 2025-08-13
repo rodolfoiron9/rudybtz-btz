@@ -22,3 +22,11 @@ export interface Profile {
     soundcloud: string;
   };
 }
+
+export interface RoadmapItem {
+  id: string;
+  title: string;
+  description: string;
+  status: 'Completed' | 'In Progress' | 'Planned';
+  dueDate: string;
+}

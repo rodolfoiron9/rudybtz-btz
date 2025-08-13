@@ -1,4 +1,4 @@
-import type { Album, Profile } from './types';
+import type { Album, Profile, RoadmapItem } from './types';
 
 export const initialAlbums: Album[] = [
   {
@@ -49,3 +49,27 @@ export const initialProfile: Profile = {
     soundcloud: 'https://soundcloud.com',
   },
 };
+
+export const initialRoadmap: RoadmapItem[] = [
+    {
+        id: 'roadmap-1',
+        title: 'Launch Music NFT Collection',
+        description: 'Create a limited edition NFT collection for a new exclusive track. Integrate with a marketplace.',
+        status: 'Planned',
+        dueDate: '2024-12-31',
+    },
+    {
+        id: 'roadmap-2',
+        title: 'Virtual Concert in Decentraland',
+        description: 'Plan and execute a live virtual performance in the Decentraland metaverse.',
+        status: 'In Progress',
+        dueDate: '2024-10-15',
+    },
+    {
+        id: 'roadmap-3',
+        title: 'Website Redesign V2',
+        description: 'Overhaul the website with a new visual theme and improved user experience.',
+        status: 'Completed',
+        dueDate: '2024-07-20',
+    }
+];
