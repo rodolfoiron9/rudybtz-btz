@@ -5,9 +5,9 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
 const backgrounds = [
-  { url: 'https://placehold.co/1920x1080.png', hint: 'neon city' },
-  { url: 'https://placehold.co/1920x1080.png', hint: 'abstract data' },
-  { url: 'https://placehold.co/1920x1080.png', hint: 'space tunnel' },
+  { url: 'https://placehold.co/1920x1080.png', hint: 'glitch art' },
+  { url: 'https://placehold.co/1920x1080.png', hint: 'cyberpunk circuit' },
+  { url: 'https://placehold.co/1920x1080.png', hint: 'digital noise' },
 ];
 
 export default function HeroSection() {
