@@ -128,7 +128,7 @@ export default function AlbumForm({ isOpen, onOpenChange, onSubmit, initialData 
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full max-w-2xl glassmorphism bg-background/80">
+      <DialogContent className="w-full max-w-2xl glassmorphism bg-card/80">
         <DialogHeader>
           <DialogTitle className="font-headline">{initialData ? 'Edit Album' : 'Add New Album'}</DialogTitle>
           <DialogDescription>

@@ -115,7 +115,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-8 bg-grid-pattern-dark">
+    <div className="min-h-screen p-4 md:p-8 bg-grid-pattern">
       <div className="max-w-6xl mx-auto">
         <header className="flex flex-col items-center justify-between gap-4 mb-8 md:flex-row">
           <h1 className="text-3xl font-black tracking-wider text-center uppercase md:text-4xl font-headline">
@@ -134,7 +134,7 @@ export default function AdminDashboard() {
             <TabsTrigger value="roadmap"><Map className="mr-2 h-4 w-4"/>Roadmap</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="albums" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-background/50">
+          <TabsContent value="albums" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-card/50">
              <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-bold font-headline">Albums</h2>
               <Button onClick={handleAddNewAlbum}><PlusCircle className="w-4 h-4 mr-2" />Add New Album</Button>
@@ -184,12 +184,12 @@ export default function AdminDashboard() {
             </div>
           </TabsContent>
           
-          <TabsContent value="profile" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-background/50">
+          <TabsContent value="profile" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-card/50">
             <h2 className="mb-4 text-2xl font-bold font-headline">Artist Profile</h2>
             <ProfileForm onSubmit={handleProfileSubmit} initialData={profile} />
           </TabsContent>
 
-          <TabsContent value="roadmap" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-background/50">
+          <TabsContent value="roadmap" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-card/50">
              <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-bold font-headline">Development Roadmap</h2>
               <Button onClick={handleAddNewRoadmapItem}><PlusCircle className="w-4 h-4 mr-2" />Add Roadmap Item</Button>

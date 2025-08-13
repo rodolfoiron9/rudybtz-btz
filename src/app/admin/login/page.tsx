@@ -49,8 +49,8 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-grid-pattern-dark">
-      <Card className="w-full max-w-sm glassmorphism bg-background/80">
+    <div className="flex items-center justify-center min-h-screen bg-grid-pattern">
+      <Card className="w-full max-w-sm glassmorphism bg-card/80">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <div className="p-3 rounded-full bg-primary/20">

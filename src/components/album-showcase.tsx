@@ -40,7 +40,7 @@ export default function AlbumShowcase() {
                         <ScrollArea className="h-56 pr-4 -mr-4">
                           <ul className="space-y-3">
                           {album.tracks.map((track, index) => (
-                              <li key={track.id} className="flex items-center justify-between p-2 rounded-md bg-white/5">
+                              <li key={track.id} className="flex items-center justify-between p-2 rounded-md bg-foreground/5">
                               <div className="flex items-center">
                                   <span className="mr-3 text-sm text-foreground/50">{index + 1}.</span>
                                   <p>{track.title}</p>
