@@ -2,6 +2,7 @@ export interface Track {
   id: string;
   title: string;
   duration: string;
+  url: string; // URL to the audio file in Firebase Storage
 }
 
 export interface Album {

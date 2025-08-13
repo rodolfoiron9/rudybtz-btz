@@ -7,11 +7,11 @@ export const initialAlbums: Album[] = [
     releaseYear: 2023,
     coverArt: 'https://placehold.co/500x500.png',
     tracks: [
-      { id: 't1', title: 'Neon Pulse', duration: '3:45' },
-      { id: 't2', title: 'Digital Ghost', duration: '4:12' },
-      { id: 't3', title: 'Chrome Heart', duration: '5:02' },
-      { id: 't4', title: 'Data Stream', duration: '2:55' },
-      { id: 't5', title: 'Future Shock', duration: '4:40' },
+      { id: 't1', title: 'Neon Pulse', duration: '3:45', url: '' },
+      { id: 't2', title: 'Digital Ghost', duration: '4:12', url: '' },
+      { id: 't3', title: 'Chrome Heart', duration: '5:02', url: '' },
+      { id: 't4', title: 'Data Stream', duration: '2:55', url: '' },
+      { id: 't5', title: 'Future Shock', duration: '4:40', url: '' },
     ],
   },
   {
@@ -20,10 +20,10 @@ export const initialAlbums: Album[] = [
     releaseYear: 2021,
     coverArt: 'https://placehold.co/500x500.png',
     tracks: [
-      { id: 't6', title: 'Starlight Echoes', duration: '4:30' },
-      { id: 't7', title: 'Zero Gravity', duration: '3:58' },
-      { id: 't8', title: 'Asteroid Field', duration: '5:15' },
-      { id: 't9', title: 'Hypersleep', duration: '6:10' },
+      { id: 't6', title: 'Starlight Echoes', duration: '4:30', url: '' },
+      { id: 't7', title: 'Zero Gravity', duration: '3:58', url: '' },
+      { id: 't8', title: 'Asteroid Field', duration: '5:15', url: '' },
+      { id: 't9', title: 'Hypersleep', duration: '6:10', url: '' },
     ],
   },
     {
@@ -32,9 +32,9 @@ export const initialAlbums: Album[] = [
     releaseYear: 2019,
     coverArt: 'https://placehold.co/500x500.png',
     tracks: [
-      { id: 't10', title: 'Vector', duration: '3:33' },
-      { id: 't11', title: 'Mainframe', duration: '4:04' },
-      { id: 't12', title: 'Circuit', duration: '3:50' },
+      { id: 't10', title: 'Vector', duration: '3:33', url: '' },
+      { id: 't11', title: 'Mainframe', duration: '4:04', url: '' },
+      { id: 't12', title: 'Circuit', duration: '3:50', url: '' },
     ],
   },
 ];

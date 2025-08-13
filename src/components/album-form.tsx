@@ -21,12 +21,15 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Loader, Sparkles, Trash } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import type { Album } from '@/lib/types';
+import { Loader, Sparkles, Trash, UploadCloud } from 'lucide-react';
+import { useEffect, useState, useRef } from 'react';
+import type { Album, Track } from '@/lib/types';
 import Image from 'next/image';
 import { generateAlbumArt } from '@/ai/flows/generate-album-art-flow';
 import { useToast } from '@/hooks/use-toast';
+import { storage } from '@/lib/firebase';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { Progress } from './ui/progress';
 
 
 const formSchema = z.object({
@@ -38,6 +41,7 @@ const formSchema = z.object({
       id: z.string().optional(),
       title: z.string().min(1, 'Track title cannot be empty.'),
       duration: z.string().regex(/^\d{1,2}:\d{2}$/, 'Duration must be in mm:ss format.'),
+      url: z.string().url('Track must have a valid URL.'),
   })).min(1, 'Album must have at least one track.'),
 });
 
@@ -53,7 +57,10 @@ interface AlbumFormProps {
 export default function AlbumForm({ isOpen, onOpenChange, onSubmit, initialData }: AlbumFormProps) {
   const { toast } = useToast();
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [coverArtPreview, setCoverArtPreview] = useState<string | null>(null);
+  const trackUploadRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<AlbumFormValues>({
     resolver: zodResolver(formSchema),
@@ -65,7 +72,7 @@ export default function AlbumForm({ isOpen, onOpenChange, onSubmit, initialData 
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control: form.control,
     name: 'tracks',
   });
@@ -81,7 +88,7 @@ export default function AlbumForm({ isOpen, onOpenChange, onSubmit, initialData 
         title: '',
         releaseYear: new Date().getFullYear(),
         coverArt: '',
-        tracks: [{ title: '', duration: '00:00' }],
+        tracks: [],
       });
     }
   }, [initialData, form, isOpen]);
@@ -94,7 +101,7 @@ export default function AlbumForm({ isOpen, onOpenChange, onSubmit, initialData 
     onSubmit(data as Album);
   };
   
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCoverArtFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (file) {
           const reader = new FileReader();
@@ -123,6 +130,42 @@ export default function AlbumForm({ isOpen, onOpenChange, onSubmit, initialData 
         toast({ variant: 'destructive', title: 'Generation Failed', description: 'Could not generate AI cover art. Please try again.' });
     } finally {
         setIsGenerating(false);
+    }
+  }
+
+  const handleTrackUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    const fileId = `track-${Date.now()}`;
+    const newTrack: Omit<Track, 'id' | 'url' | 'duration'> = { title: file.name.replace(/\.[^/.]+$/, "") };
+    const tempTrackId = append({ ...newTrack, id: fileId, url: '', duration: '0:00' });
+    const trackIndex = fields.length;
+
+    try {
+        const storageRef = ref(storage, `tracks/${file.name}`);
+        const uploadTask = await uploadBytes(storageRef, file);
+        const downloadURL = await getDownloadURL(uploadTask.ref);
+
+        const audio = new Audio(downloadURL);
+        audio.onloadedmetadata = () => {
+            const minutes = Math.floor(audio.duration / 60);
+            const seconds = Math.floor(audio.duration % 60).toString().padStart(2, '0');
+            const duration = `${minutes}:${seconds}`;
+            update(trackIndex, { id: fileId, title: newTrack.title, url: downloadURL, duration: duration });
+        };
+        
+        toast({ title: "Track uploaded", description: `${file.name} has been added.` });
+    } catch (error) {
+        console.error("Upload failed", error);
+        remove(trackIndex);
+        toast({ variant: 'destructive', title: "Upload Failed", description: "Could not upload track." });
+    } finally {
+        setIsUploading(false);
+        setUploadProgress(0);
     }
   }
 
@@ -159,7 +202,7 @@ export default function AlbumForm({ isOpen, onOpenChange, onSubmit, initialData 
                         <FormField name="coverArt" control={form.control} render={() => (
                             <FormItem className="flex-grow">
                                 <FormControl>
-                                    <Input id="cover-art-upload" type="file" accept="image/*" onChange={handleFileChange} className="sr-only" />
+                                    <Input id="cover-art-upload" type="file" accept="image/*" onChange={handleCoverArtFileChange} className="sr-only" />
                                 </FormControl>
                                 <Button type="button" asChild variant="outline" className="w-full">
                                     <label htmlFor="cover-art-upload">Upload Image</label>
@@ -178,19 +221,20 @@ export default function AlbumForm({ isOpen, onOpenChange, onSubmit, initialData 
             <div>
               <FormLabel>Tracks</FormLabel>
                <div className="mt-2 space-y-2">
+                {isUploading && <Progress value={uploadProgress} className="w-full" />}
                 {fields.map((field, index) => (
-                  <div key={field.id} className="flex items-center gap-2">
-                     <FormField control={form.control} name={`tracks.${index}.title`} render={({ field }) => (
-                        <FormItem className="flex-grow"><FormControl><Input placeholder="Track Title" {...field} /></FormControl><FormMessage /></FormItem>
-                    )} />
-                     <FormField control={form.control} name={`tracks.${index}.duration`} render={({ field }) => (
-                        <FormItem><FormControl><Input placeholder="mm:ss" className="w-24" {...field} /></FormControl><FormMessage /></FormItem>
-                    )} />
+                  <div key={field.id} className="flex items-center gap-2 p-2 rounded-md bg-foreground/5">
+                     <p className='flex-grow font-medium'>{field.title}</p>
+                     <p className='text-sm text-muted-foreground'>{field.duration}</p>
                     <Button type="button" variant="destructive" size="icon" onClick={() => remove(index)}><Trash className="w-4 h-4" /></Button>
                   </div>
                 ))}
               </div>
-              <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => append({ title: '', duration: '00:00' })}>Upload Track</Button>
+              <input type="file" accept="audio/*" ref={trackUploadRef} onChange={handleTrackUpload} className="sr-only" />
+              <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => trackUploadRef.current?.click()} disabled={isUploading}>
+                <UploadCloud className="w-4 h-4 mr-2" />
+                {isUploading ? 'Uploading...' : 'Upload Track'}
+              </Button>
             </div>
 
             <DialogFooter className="sticky bottom-0 !mt-8">
