@@ -3,16 +3,18 @@
 import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import useLocalStorage from '@/hooks/use-local-storage';
-import { initialAlbums } from '@/lib/data';
 import type { Album, Track } from '@/lib/types';
-import { ListMusic, Play, Pause, Music } from 'lucide-react';
+import { ListMusic, Play, Pause, Loader2 } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
+import { getAlbums } from '@/lib/firestore';
+import { Skeleton } from './ui/skeleton';
+
 
 export default function AlbumShowcase() {
-  const [albums] = useLocalStorage<Album[]>('rudybtz-albums', initialAlbums);
+  const [albums, setAlbums] = useState<Album[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
   const [nowPlaying, setNowPlaying] = useState<Track | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -20,6 +22,18 @@ export default function AlbumShowcase() {
 
   useEffect(() => {
     setIsClient(true);
+    const fetchAlbums = async () => {
+      try {
+        setIsLoading(true);
+        const albumsData = await getAlbums();
+        setAlbums(albumsData);
+      } catch (error) {
+        console.error("Error fetching albums: ", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchAlbums();
   }, []);
 
   useEffect(() => {
@@ -40,6 +54,7 @@ export default function AlbumShowcase() {
   }, [nowPlaying]);
 
   const handlePlayPause = (track: Track) => {
+    if(!track.url) return;
     if (nowPlaying?.id === track.id) {
         setIsPlaying(!isPlaying);
     } else {
@@ -47,10 +62,35 @@ export default function AlbumShowcase() {
     }
   }
 
-
-  if (!isClient) {
-    // Render nothing or a skeleton loader on the server
-    return null;
+  if (!isClient || isLoading) {
+    return (
+       <div className="container mx-auto space-y-12">
+          <div className="text-center">
+            <h2 className="mb-4 text-4xl font-black tracking-wider uppercase md:text-6xl font-headline">Discography</h2>
+            <p className="max-w-2xl mx-auto mb-12 text-lg text-foreground/70">
+              Explore the sonic journeys crafted by RUDYBTZ. Each album is a unique universe of sound.
+            </p>
+          </div>
+          {[...Array(3)].map((_, i) => (
+            <Card key={i} className="overflow-hidden border-0 glassmorphism bg-card/50">
+              <div className="grid md:grid-cols-2">
+                <div className="relative aspect-square bg-muted/30">
+                  <Skeleton className="w-full h-full"/>
+                </div>
+                <div className="flex flex-col p-6 text-left md:p-8">
+                  <Skeleton className="w-3/4 h-10 mb-4"/>
+                  <Skeleton className="w-1/2 h-6 mb-6"/>
+                  <div className="space-y-2">
+                    {[...Array(4)].map((_, j) => <Skeleton key={j} className="w-full h-8"/>)}
+                  </div>
+                   <div className="flex-grow mt-6"/>
+                   <Skeleton className="w-1/4 h-8 mx-auto"/>
+                </div>
+              </div>
+            </Card>
+          ))}
+      </div>
+    );
   }
 
   return (
@@ -83,13 +123,14 @@ export default function AlbumShowcase() {
                           <ul className="space-y-1">
                           {album.tracks.map((track, index) => (
                               <li key={track.id} 
-                                  className={cn("flex items-center justify-between p-2 rounded-md transition-colors cursor-pointer",
+                                  className={cn("flex items-center justify-between p-2 rounded-md transition-colors",
+                                    track.url ? "cursor-pointer" : "cursor-not-allowed opacity-60",
                                     nowPlaying?.id === track.id ? "bg-accent/30" : "hover:bg-foreground/5"
                                   )}
                                   onClick={() => handlePlayPause(track)}
                                 >
                               <div className="flex items-center gap-3">
-                                  <Button variant="ghost" size="icon" className='w-8 h-8'>
+                                  <Button variant="ghost" size="icon" className='w-8 h-8' disabled={!track.url}>
                                     {nowPlaying?.id === track.id && isPlaying ? <Pause className='w-4 h-4 text-accent'/> : <Play className='w-4 h-4'/>}
                                   </Button>
                                   <div className='flex items-baseline gap-3'>

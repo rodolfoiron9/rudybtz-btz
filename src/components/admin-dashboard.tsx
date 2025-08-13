@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -30,16 +30,21 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import useLocalStorage from '@/hooks/use-local-storage';
-import { initialAlbums, initialProfile, initialRoadmap } from '@/lib/data';
+import { initialProfile, initialRoadmap } from '@/lib/data';
+import { getAlbums, addAlbum, updateAlbum, deleteAlbum } from '@/lib/firestore';
 import type { Album, Profile, RoadmapItem } from '@/lib/types';
 import AlbumForm from './album-form';
 import ProfileForm from './profile-form';
 import RoadmapForm from './roadmap-form';
-import { Home, LogOut, Music, Pencil, PlusCircle, Trash, User, Map } from 'lucide-react';
+import { Home, LogOut, Music, Pencil, PlusCircle, Trash, User, Map, Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [albums, setAlbums] = useLocalStorage<Album[]>('rudybtz-albums', initialAlbums);
+  const { toast } = useToast();
+  const [albums, setAlbums] = useState<Album[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useLocalStorage<Profile>('rudybtz-profile', initialProfile);
   const [roadmap, setRoadmap] = useLocalStorage<RoadmapItem[]>('rudybtz-roadmap', initialRoadmap);
 
@@ -48,6 +53,26 @@ export default function AdminDashboard() {
 
   const [isRoadmapFormOpen, setIsRoadmapFormOpen] = useState(false);
   const [editingRoadmapItem, setEditingRoadmapItem] = useState<RoadmapItem | null>(null);
+
+  useEffect(() => {
+    const fetchAlbums = async () => {
+      try {
+        setIsLoading(true);
+        const albumsData = await getAlbums();
+        setAlbums(albumsData);
+      } catch (error) {
+        console.error("Error fetching albums: ", error);
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to fetch albums from the database.',
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchAlbums();
+  }, [toast]);
 
   const handleLogout = () => {
     window.localStorage.removeItem('rudybtz-admin-auth');
@@ -64,17 +89,41 @@ export default function AdminDashboard() {
     setIsAlbumFormOpen(true);
   };
 
-  const handleDeleteAlbum = (albumId: string) => {
-    setAlbums(albums.filter((album) => album.id !== albumId));
+  const handleDeleteAlbum = async (albumId: string) => {
+    try {
+      await deleteAlbum(albumId);
+      setAlbums(albums.filter((album) => album.id !== albumId));
+      toast({ title: 'Success', description: 'Album deleted successfully.' });
+    } catch (error) {
+       console.error("Error deleting album: ", error);
+       toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to delete album.',
+       });
+    }
   };
 
-  const handleAlbumFormSubmit = (data: Album) => {
-    if (editingAlbum) {
-      setAlbums(albums.map((album) => (album.id === data.id ? data : album)));
-    } else {
-      setAlbums([...albums, { ...data, id: `album-${Date.now()}` }]);
+  const handleAlbumFormSubmit = async (data: Album) => {
+    try {
+      if (editingAlbum) {
+        await updateAlbum(data.id, data);
+        setAlbums(albums.map((album) => (album.id === data.id ? data : album)));
+        toast({ title: 'Success', description: 'Album updated successfully.' });
+      } else {
+        const docRef = await addAlbum(data);
+        setAlbums([...albums, { ...data, id: docRef.id }]);
+        toast({ title: 'Success', description: 'Album added successfully.' });
+      }
+      setIsAlbumFormOpen(false);
+    } catch (error) {
+        console.error("Error saving album: ", error);
+        toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'Failed to save album to the database.',
+        });
     }
-    setIsAlbumFormOpen(false);
   };
   
   const handleAddNewRoadmapItem = () => {
@@ -150,7 +199,13 @@ export default function AdminDashboard() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {albums.map((album) => (
+                    {isLoading ? (
+                      <TableRow>
+                        <TableCell colSpan={4} className="text-center h-24">
+                          <Loader2 className="w-6 h-6 animate-spin mx-auto"/>
+                        </TableCell>
+                      </TableRow>
+                    ) : albums.map((album) => (
                     <TableRow key={album.id}>
                         <TableCell><img src={album.coverArt} alt={album.title} className="w-12 h-12 rounded-md object-cover" /></TableCell>
                         <TableCell className="font-medium">{album.title}</TableCell>
