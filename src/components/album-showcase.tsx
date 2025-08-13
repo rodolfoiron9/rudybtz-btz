@@ -7,9 +7,21 @@ import useLocalStorage from '@/hooks/use-local-storage';
 import { initialAlbums } from '@/lib/data';
 import type { Album } from '@/lib/types';
 import { ListMusic } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function AlbumShowcase() {
   const [albums] = useLocalStorage<Album[]>('rudybtz-albums', initialAlbums);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+
+  if (!isClient) {
+    // Render nothing or a skeleton loader on the server
+    return null;
+  }
 
   return (
     <div className="container mx-auto">
