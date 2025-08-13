@@ -33,7 +33,7 @@ export default function AlbumShowcase() {
                     />
                 </div>
                 <div className="flex flex-col p-6 text-left md:p-8">
-                    <h3 className="text-3xl font-bold md:text-4xl font-headline">{album.title}</h3>
+                    <h3 className="text-3xl font-bold md:text-4xl font-headline drop-shadow-[0_0_8px_hsl(var(--primary))]">{album.title}</h3>
 
                     <div className="flex flex-col flex-grow mt-6">
                         <h4 className="flex items-center gap-2 mb-3 text-lg font-semibold font-headline"><ListMusic className="w-5 h-5 text-accent" /> Tracklist</h4>
@@ -51,7 +51,7 @@ export default function AlbumShowcase() {
                           </ul>
                         </ScrollArea>
                     </div>
-                    <p className="mt-4 text-sm text-right text-accent">{album.releaseYear}</p>
+                    <p className="mt-4 text-lg text-center text-accent font-headline drop-shadow-[0_0_5px_hsl(var(--accent))]">{album.releaseYear}</p>
                 </div>
             </div>
           </Card>
