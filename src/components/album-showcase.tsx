@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import useLocalStorage from '@/hooks/use-local-storage';
 import { initialAlbums } from '@/lib/data';
 import type { Album } from '@/lib/types';
@@ -35,19 +36,21 @@ export default function AlbumShowcase() {
                     <p className="text-sm text-accent">{album.releaseYear}</p>
                     <h3 className="mt-1 text-3xl font-bold md:text-4xl font-headline">{album.title}</h3>
 
-                    <div className="mt-6">
+                    <div className="flex flex-col flex-grow mt-6">
                         <h4 className="flex items-center gap-2 mb-3 text-lg font-semibold font-headline"><ListMusic className="w-5 h-5 text-accent" /> Tracklist</h4>
-                        <ul className="space-y-3">
-                        {album.tracks.map((track, index) => (
-                            <li key={track.id} className="flex items-center justify-between p-2 rounded-md bg-white/5">
-                            <div className="flex items-center">
-                                <span className="mr-3 text-sm text-foreground/50">{index + 1}.</span>
-                                <p>{track.title}</p>
-                            </div>
-                            <span className="text-sm text-foreground/50">{track.duration}</span>
-                            </li>
-                        ))}
-                        </ul>
+                        <ScrollArea className="h-56 pr-4 -mr-4">
+                          <ul className="space-y-3">
+                          {album.tracks.map((track, index) => (
+                              <li key={track.id} className="flex items-center justify-between p-2 rounded-md bg-white/5">
+                              <div className="flex items-center">
+                                  <span className="mr-3 text-sm text-foreground/50">{index + 1}.</span>
+                                  <p>{track.title}</p>
+                              </div>
+                              <span className="text-sm text-foreground/50">{track.duration}</span>
+                              </li>
+                          ))}
+                          </ul>
+                        </ScrollArea>
                     </div>
                 </div>
             </div>
