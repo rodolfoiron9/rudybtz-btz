@@ -30,13 +30,14 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import useLocalStorage from '@/hooks/use-local-storage';
-import { initialProfile, initialRoadmap } from '@/lib/data';
+import { initialProfile, initialRoadmap, initialApiKeys } from '@/lib/data';
 import { getAlbums, addAlbum, updateAlbum, deleteAlbum } from '@/lib/firestore';
-import type { Album, Profile, RoadmapItem, KnowledgeArticle } from '@/lib/types';
+import type { Album, Profile, RoadmapItem, KnowledgeArticle, ApiKeys } from '@/lib/types';
 import AlbumForm from './album-form';
 import ProfileForm from './profile-form';
 import RoadmapForm from './roadmap-form';
-import { Home, LogOut, Music, Pencil, PlusCircle, Trash, User, Map, Loader2, BrainCircuit } from 'lucide-react';
+import ApiKeysForm from './api-keys-form';
+import { Home, LogOut, Music, Pencil, PlusCircle, Trash, User, Map, Loader2, BrainCircuit, Key } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { getArticles } from '@/lib/knowledge-firestore';
 
@@ -48,6 +49,7 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useLocalStorage<Profile>('rudybtz-profile', initialProfile);
   const [roadmap, setRoadmap] = useLocalStorage<RoadmapItem[]>('rudybtz-roadmap', initialRoadmap);
+  const [apiKeys, setApiKeys] = useLocalStorage<ApiKeys>('rudybtz-apikeys', initialApiKeys);
   const [articles, setArticles] = useState<KnowledgeArticle[]>([]);
 
   const [isAlbumFormOpen, setIsAlbumFormOpen] = useState(false);
@@ -159,6 +161,10 @@ export default function AdminDashboard() {
   const handleProfileSubmit = (data: Profile) => {
     setProfile(data);
   };
+  
+  const handleApiKeysSubmit = (data: ApiKeys) => {
+    setApiKeys(data);
+  };
 
   const getStatusBadgeVariant = (status: RoadmapItem['status']) => {
     switch (status) {
@@ -183,11 +189,12 @@ export default function AdminDashboard() {
         </header>
 
         <Tabs defaultValue="albums" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="albums"><Music className="mr-2 h-4 w-4"/>Manage Albums</TabsTrigger>
             <TabsTrigger value="profile"><User className="mr-2 h-4 w-4"/>Edit Profile</TabsTrigger>
             <TabsTrigger value="roadmap"><Map className="mr-2 h-4 w-4"/>Roadmap</TabsTrigger>
             <TabsTrigger value="knowledge"><BrainCircuit className="mr-2 h-4 w-4"/>Knowledge Base</TabsTrigger>
+            <TabsTrigger value="apikeys"><Key className="mr-2 h-4 w-4"/>API Keys</TabsTrigger>
           </TabsList>
 
           <TabsContent value="albums" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-card/50">
@@ -337,6 +344,11 @@ export default function AdminDashboard() {
                 </TableBody>
                 </Table>
             </div>
+          </TabsContent>
+          
+          <TabsContent value="apikeys" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-card/50">
+            <h2 className="mb-4 text-2xl font-bold font-headline">API Keys</h2>
+            <ApiKeysForm onSubmit={handleApiKeysSubmit} initialData={apiKeys} />
           </TabsContent>
         </Tabs>
 

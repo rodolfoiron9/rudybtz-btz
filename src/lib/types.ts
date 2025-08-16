@@ -39,3 +39,15 @@ export interface KnowledgeArticle {
     format: 'text' | 'json';
     lastUpdated: string; // ISO date string
 }
+
+export interface ApiKeys {
+    gemini: string;
+    huggingFace: string;
+    deepseek: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  text: string;
+}

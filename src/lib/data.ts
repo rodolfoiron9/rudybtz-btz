@@ -1,4 +1,4 @@
-import type { Album, Profile, RoadmapItem } from './types';
+import type { Album, Profile, RoadmapItem, ApiKeys } from './types';
 
 export const initialAlbums: Album[] = [
   {
@@ -73,3 +73,9 @@ export const initialRoadmap: RoadmapItem[] = [
         dueDate: '2024-07-20',
     }
 ];
+
+export const initialApiKeys: ApiKeys = {
+    gemini: '',
+    huggingFace: '',
+    deepseek: '',
+};
