@@ -206,7 +206,7 @@ export default function AdminDashboard() {
             <TabsTrigger value="apikeys"><Key className="mr-2 h-4 w-4"/>API Keys</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="albums" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-card/50">
+          <TabsContent value="albums" className="p-4 mt-4 rounded-xl md:p-6 glassmorphism bg-card/50">
              <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-bold font-headline">Albums</h2>
               <Button onClick={handleAddNewAlbum}><PlusCircle className="w-4 h-4 mr-2" />Add New Album</Button>
@@ -262,12 +262,12 @@ export default function AdminDashboard() {
             </div>
           </TabsContent>
           
-          <TabsContent value="profile" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-card/50">
+          <TabsContent value="profile" className="p-4 mt-4 rounded-xl md:p-6 glassmorphism bg-card/50">
             <h2 className="mb-4 text-2xl font-bold font-headline">Artist Profile</h2>
             <ProfileForm onSubmit={handleProfileSubmit} initialData={profile} />
           </TabsContent>
 
-          <TabsContent value="roadmap" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-card/50">
+          <TabsContent value="roadmap" className="p-4 mt-4 rounded-xl md:p-6 glassmorphism bg-card/50">
              <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-bold font-headline">Development Roadmap</h2>
               <Button onClick={handleAddNewRoadmapItem}><PlusCircle className="w-4 h-4 mr-2" />Add Roadmap Item</Button>
@@ -316,12 +316,12 @@ export default function AdminDashboard() {
             </div>
           </TabsContent>
           
-          <TabsContent value="theme" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-card/50">
+          <TabsContent value="theme" className="p-4 mt-4 rounded-xl md:p-6 glassmorphism bg-card/50">
             <h2 className="mb-4 text-2xl font-bold font-headline">Visual Theme</h2>
             <ThemeForm onSubmit={handleThemeSubmit} initialData={themeSettings} />
           </TabsContent>
 
-          <TabsContent value="knowledge" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-card/50">
+          <TabsContent value="knowledge" className="p-4 mt-4 rounded-xl md:p-6 glassmorphism bg-card/50">
              <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-bold font-headline">AI Knowledge Base</h2>
               <Button disabled><PlusCircle className="w-4 h-4 mr-2" />Add Article (Soon)</Button>
@@ -360,7 +360,7 @@ export default function AdminDashboard() {
             </div>
           </TabsContent>
           
-          <TabsContent value="apikeys" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-card/50">
+          <TabsContent value="apikeys" className="p-4 mt-4 rounded-xl md:p-6 glassmorphism bg-card/50">
             <h2 className="mb-4 text-2xl font-bold font-headline">API Keys</h2>
             <ApiKeysForm onSubmit={handleApiKeysSubmit} initialData={apiKeys} />
           </TabsContent>

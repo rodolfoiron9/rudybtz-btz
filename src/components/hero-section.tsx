@@ -39,7 +39,7 @@ export default function HeroSection() {
       ))}
       <div className="absolute inset-0 bg-black/60" />
       <div className="relative z-10 text-center text-white">
-        <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-widest uppercase font-headline">
+        <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-widest uppercase bg-clip-text text-transparent bg-gradient-to-br from-white via-neutral-300 to-neutral-500 drop-shadow-2xl font-headline">
           RUDYBTZ
         </h1>
         <p className="mt-4 text-lg md:text-xl font-light tracking-wider text-primary-foreground/80 font-body">

@@ -60,7 +60,7 @@
     --input: hsl(var(--input-hsl));
     --ring: hsl(var(--ring-hsl));
     
-    --radius: 0.5rem;
+    --radius: 1rem;
   }
 }
 
