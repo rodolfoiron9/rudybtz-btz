@@ -4,7 +4,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Music, UserCircle, Bot, Map } from 'lucide-react';
+import { Menu, Music, UserCircle, Bot } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
@@ -41,7 +41,6 @@ export default function Header() {
         <SheetContent side="top" className="p-4 pt-20 border-b-0 glassmorphism bg-background/80">
             <nav className="flex flex-col gap-2">
                 <MobileNavLink href="/#albums" onOpenChange={setIsOpen}><Music className="w-5 h-5 text-accent"/>Albums</MobileNavLink>
-                <MobileNavLink href="/#roadmap" onOpenChange={setIsOpen}><Map className="w-5 h-5 text-accent"/>Roadmap</MobileNavLink>
                 <MobileNavLink href="/#bio" onOpenChange={setIsOpen}><UserCircle className="w-5 h-5 text-accent"/>Bio</MobileNavLink>
                 <MobileNavLink href="/chat" onOpenChange={setIsOpen}><Bot className="w-5 h-5 text-accent"/>Chat</MobileNavLink>
                 <div className="pt-4 mt-4 border-t border-white/10">
@@ -66,7 +65,6 @@ export default function Header() {
           </Link>
           <nav className="flex items-center gap-6">
             <NavLink href="/#albums">Albums</NavLink>
-            <NavLink href="/#roadmap">Roadmap</NavLink>
             <NavLink href="/#bio">Bio</NavLink>
             <NavLink href="/chat">Chat</NavLink>
             <Link href="/admin">
