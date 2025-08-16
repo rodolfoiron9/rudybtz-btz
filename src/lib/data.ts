@@ -15,8 +15,8 @@ export const initialAlbums: Album[] = [
     ],
   },
   {
-    id: 'void-runner',
-    title: 'Void Runner',
+    id: 'old-habits-die-hard',
+    title: 'Old Habits Die Hard',
     releaseYear: 2021,
     coverArt: 'https://placehold.co/500x500.png',
     tracks: [
