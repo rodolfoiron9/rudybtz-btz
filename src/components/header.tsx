@@ -8,7 +8,7 @@ import { Menu, Music, UserCircle } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <Link href={href} className="text-sm font-medium transition-colors text-primary-foreground/70 hover:text-primary-foreground hover:drop-shadow-[0_0_5px_hsl(var(--accent))]">
+  <Link href={href} className="text-sm font-medium transition-colors text-primary-foreground/70 hover:text-primary-foreground">
     {children}
   </Link>
 );
@@ -28,7 +28,7 @@ export default function Header() {
        <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <header className="fixed top-0 left-0 right-0 z-40 p-4">
             <div className="flex items-center justify-between p-2 px-4 rounded-lg glassmorphism">
-                <Link href="/" className="font-black tracking-wider uppercase font-headline text-lg drop-shadow-[0_0_8px_hsl(var(--primary))]">
+                <Link href="/" className="font-black tracking-wider uppercase font-headline text-lg">
                 RUDYBTZ
                 </Link>
                 <SheetTrigger asChild>
@@ -44,7 +44,7 @@ export default function Header() {
                 <MobileNavLink href="/#bio" onOpenChange={setIsOpen}><UserCircle className="w-5 h-5 text-accent"/>Bio</MobileNavLink>
                 <div className="pt-4 mt-4 border-t border-white/10">
                     <Link href="/admin">
-                         <Button variant="outline" className="w-full text-lg font-semibold border-accent text-accent hover:bg-accent hover:text-accent-foreground hover:shadow-[0_0_15px_hsl(var(--accent))] transition-shadow duration-300">
+                         <Button variant="outline" className="w-full text-lg font-semibold border-accent text-accent hover:bg-accent hover:text-accent-foreground">
                              Admin Panel
                          </Button>
                     </Link>
@@ -59,14 +59,14 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-40 p-4">
       <div className="container mx-auto">
         <div className="flex items-center justify-between px-6 py-3 rounded-lg glassmorphism">
-          <Link href="/" className="text-2xl font-black tracking-wider uppercase font-headline drop-shadow-[0_0_8px_hsl(var(--primary))]">
+          <Link href="/" className="text-2xl font-black tracking-wider uppercase font-headline">
             RUDYBTZ
           </Link>
           <nav className="flex items-center gap-6">
             <NavLink href="/#albums">Albums</NavLink>
             <NavLink href="/#bio">Bio</NavLink>
             <Link href="/admin">
-              <Button variant="outline" size="sm" className="transition-shadow duration-300 border-accent text-accent hover:bg-accent hover:text-accent-foreground hover:shadow-[0_0_15px_hsl(var(--accent))]">
+              <Button variant="outline" size="sm" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
                 Admin
               </Button>
             </Link>

@@ -39,7 +39,7 @@ export default function HeroSection() {
       ))}
       <div className="absolute inset-0 bg-black/60" />
       <div className="relative z-10 text-center text-white">
-        <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-widest uppercase font-headline text-shadow-lg drop-shadow-[0_0_15px_hsl(var(--primary))]">
+        <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-widest uppercase font-headline">
           RUDYBTZ
         </h1>
         <p className="mt-4 text-lg md:text-xl font-light tracking-wider text-primary-foreground/80 font-body">
