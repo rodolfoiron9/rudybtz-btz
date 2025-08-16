@@ -51,3 +51,13 @@ export interface ChatMessage {
   role: 'user' | 'assistant';
   text: string;
 }
+
+export interface ThemeSettings {
+  background: {
+    type: 'color' | 'particles';
+    value: string; // Hex color code
+  };
+  primary: string; // HSL string
+  accent: string; // HSL string
+}
+    

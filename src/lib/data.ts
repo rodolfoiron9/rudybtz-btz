@@ -1,4 +1,4 @@
-import type { Album, Profile, RoadmapItem, ApiKeys } from './types';
+import type { Album, Profile, RoadmapItem, ApiKeys, ThemeSettings } from './types';
 
 export const initialAlbums: Album[] = [
   {
@@ -79,3 +79,13 @@ export const initialApiKeys: ApiKeys = {
     huggingFace: '',
     deepseek: '',
 };
+
+export const initialThemeSettings: ThemeSettings = {
+  background: {
+    type: 'particles',
+    value: '#0A0514' // Default background color if particles are off
+  },
+  primary: '170 80% 50%', // Neon Cyan/Green
+  accent: '330 90% 60%' // Neon Magenta/Pink
+};
+    
