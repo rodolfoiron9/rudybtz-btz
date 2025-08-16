@@ -32,12 +32,13 @@ import {
 import useLocalStorage from '@/hooks/use-local-storage';
 import { initialProfile, initialRoadmap } from '@/lib/data';
 import { getAlbums, addAlbum, updateAlbum, deleteAlbum } from '@/lib/firestore';
-import type { Album, Profile, RoadmapItem } from '@/lib/types';
+import type { Album, Profile, RoadmapItem, KnowledgeArticle } from '@/lib/types';
 import AlbumForm from './album-form';
 import ProfileForm from './profile-form';
 import RoadmapForm from './roadmap-form';
-import { Home, LogOut, Music, Pencil, PlusCircle, Trash, User, Map, Loader2 } from 'lucide-react';
+import { Home, LogOut, Music, Pencil, PlusCircle, Trash, User, Map, Loader2, BrainCircuit } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { getArticles } from '@/lib/knowledge-firestore';
 
 
 export default function AdminDashboard() {
@@ -47,6 +48,7 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useLocalStorage<Profile>('rudybtz-profile', initialProfile);
   const [roadmap, setRoadmap] = useLocalStorage<RoadmapItem[]>('rudybtz-roadmap', initialRoadmap);
+  const [articles, setArticles] = useState<KnowledgeArticle[]>([]);
 
   const [isAlbumFormOpen, setIsAlbumFormOpen] = useState(false);
   const [editingAlbum, setEditingAlbum] = useState<Album | null>(null);
@@ -55,23 +57,27 @@ export default function AdminDashboard() {
   const [editingRoadmapItem, setEditingRoadmapItem] = useState<RoadmapItem | null>(null);
 
   useEffect(() => {
-    const fetchAlbums = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true);
-        const albumsData = await getAlbums();
+        const [albumsData, articlesData] = await Promise.all([
+          getAlbums(),
+          getArticles()
+        ]);
         setAlbums(albumsData);
+        setArticles(articlesData);
       } catch (error) {
-        console.error("Error fetching albums: ", error);
+        console.error("Error fetching data: ", error);
         toast({
           variant: 'destructive',
           title: 'Error',
-          description: 'Failed to fetch albums from the database.',
+          description: 'Failed to fetch data from the database.',
         });
       } finally {
         setIsLoading(false);
       }
     };
-    fetchAlbums();
+    fetchData();
   }, [toast]);
 
   const handleLogout = () => {
@@ -164,7 +170,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-8 bg-grid-pattern">
+    <div className="min-h-screen p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         <header className="flex flex-col items-center justify-between gap-4 mb-8 md:flex-row">
           <h1 className="text-3xl font-black tracking-wider text-center uppercase md:text-4xl font-headline">
@@ -177,10 +183,11 @@ export default function AdminDashboard() {
         </header>
 
         <Tabs defaultValue="albums" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="albums"><Music className="mr-2 h-4 w-4"/>Manage Albums</TabsTrigger>
             <TabsTrigger value="profile"><User className="mr-2 h-4 w-4"/>Edit Profile</TabsTrigger>
             <TabsTrigger value="roadmap"><Map className="mr-2 h-4 w-4"/>Roadmap</TabsTrigger>
+            <TabsTrigger value="knowledge"><BrainCircuit className="mr-2 h-4 w-4"/>Knowledge Base</TabsTrigger>
           </TabsList>
 
           <TabsContent value="albums" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-card/50">
@@ -287,6 +294,45 @@ export default function AdminDashboard() {
                         </AlertDialog>
                         </TableCell>
                     </TableRow>
+                    ))}
+                </TableBody>
+                </Table>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="knowledge" className="p-4 mt-4 rounded-lg md:p-6 glassmorphism bg-card/50">
+             <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold font-headline">AI Knowledge Base</h2>
+              <Button disabled><PlusCircle className="w-4 h-4 mr-2" />Add Article (Soon)</Button>
+            </div>
+             <p className="mb-4 text-sm text-muted-foreground">This section will be used to manage content for fine-tuning AI agents. You can upload text, JSON, and other formats.</p>
+            <div className="border rounded-lg">
+                <Table>
+                <TableHeader>
+                    <TableRow>
+                    <TableHead>Title</TableHead>
+                    <TableHead>Format</TableHead>
+                    <TableHead>Last Updated</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {isLoading ? (
+                       <TableRow>
+                        <TableCell colSpan={4} className="text-center h-24">
+                          <Loader2 className="w-6 h-6 animate-spin mx-auto"/>
+                        </TableCell>
+                      </TableRow>
+                    ) : articles.map((article) => (
+                      <TableRow key={article.id}>
+                        <TableCell className="font-medium">{article.title}</TableCell>
+                        <TableCell><Badge variant="outline">{article.format}</Badge></TableCell>
+                        <TableCell>{new Date(article.lastUpdated).toLocaleDateString()}</TableCell>
+                        <TableCell className="text-right">
+                          <Button variant="ghost" size="icon" disabled><Pencil className="w-4 h-4" /></Button>
+                          <Button variant="ghost" size="icon" className="text-destructive" disabled><Trash className="w-4 h-4" /></Button>
+                        </TableCell>
+                      </TableRow>
                     ))}
                 </TableBody>
                 </Table>

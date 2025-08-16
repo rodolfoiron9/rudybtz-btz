@@ -31,3 +31,11 @@ export interface RoadmapItem {
   status: 'Completed' | 'In Progress' | 'Planned';
   dueDate: string;
 }
+
+export interface KnowledgeArticle {
+    id: string;
+    title: string;
+    content: string; // Can be raw text or stringified JSON
+    format: 'text' | 'json';
+    lastUpdated: string; // ISO date string
+}
