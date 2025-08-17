@@ -64,7 +64,7 @@ export default function ChatInterface() {
                     <Bot className="w-8 h-8 text-primary" />
                 </div>
             </div>
-            <CardTitle className="text-2xl font-black tracking-wider uppercase font-headline">AI Fan Chat</CardTitle>
+            <CardTitle className="text-2xl font-black tracking-wider uppercase font-headline text-metallic">AI Fan Chat</CardTitle>
             <CardDescription>Chat with an AI trained on RUDYBTZ's world.</CardDescription>
         </CardHeader>
       <CardContent className="flex-grow flex flex-col p-4">

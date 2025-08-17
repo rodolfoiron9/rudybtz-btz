@@ -81,7 +81,7 @@ export default function AlbumShowcase({ albums }: { albums: Album[] }) {
   return (
     <div className="container mx-auto">
       <div className="text-center">
-        <h2 className="mb-4 text-4xl font-black tracking-wider uppercase md:text-6xl font-headline">Discography</h2>
+        <h2 className="mb-4 text-4xl font-black tracking-wider uppercase md:text-6xl font-headline text-metallic">Discography</h2>
         <p className="max-w-2xl mx-auto mb-12 text-lg text-foreground/70">
           Explore the sonic journeys crafted by RUDYBTZ. Each album is a unique universe of sound.
         </p>
@@ -100,10 +100,10 @@ export default function AlbumShowcase({ albums }: { albums: Album[] }) {
                     />
                 </div>
                 <div className="flex flex-col p-6 text-left md:p-8">
-                    <h3 className="text-3xl font-bold md:text-4xl font-headline">{album.title}</h3>
+                    <h3 className="text-3xl font-bold md:text-4xl font-headline text-metallic">{album.title}</h3>
 
                     <div className="flex flex-col flex-grow mt-6">
-                        <h4 className="flex items-center gap-2 mb-3 text-lg font-semibold font-headline"><ListMusic className="w-5 h-5 text-accent" /> Tracklist</h4>
+                        <h4 className="flex items-center gap-2 mb-3 text-lg font-semibold font-headline text-metallic"><ListMusic className="w-5 h-5 text-accent" /> Tracklist</h4>
                         <ScrollArea className="h-56 pr-4 -mr-4">
                           <ul className="space-y-1">
                           {album.tracks.map((track, index) => (

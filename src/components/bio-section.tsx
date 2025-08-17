@@ -35,7 +35,7 @@ export default function BioSection() {
           <div className="absolute inset-0 rounded-full bg-primary/50 blur-2xl animate-pulse"></div>
         </div>
         <div className="md:col-span-2">
-          <h2 className="mb-4 text-4xl font-black tracking-wider uppercase md:text-6xl font-headline">The Artist</h2>
+          <h2 className="mb-4 text-4xl font-black tracking-wider uppercase md:text-6xl font-headline text-metallic">The Artist</h2>
           <p className="mb-8 text-lg leading-relaxed text-foreground/80">
             {profile.bio}
           </p>
