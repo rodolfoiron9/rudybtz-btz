@@ -40,7 +40,7 @@ export default function BioSection() {
             {profile.bio}
           </p>
           <div className="flex flex-wrap items-center gap-4">
-            <p className="mr-4 font-bold">Follow on:</p>
+            <p className="mr-4 font-bold text-metallic">Follow on:</p>
             {Object.entries(profile.socials)
               .filter(([, url]) => url)
               .map(([key, url]) => (

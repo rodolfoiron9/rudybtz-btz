@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Music, UserCircle, Bot } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
-const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <Link href={href} className="text-sm font-medium transition-colors text-foreground/70 hover:text-foreground">
+const NavLink = ({ href, children, className }: { href: string; children: React.ReactNode, className?: string }) => (
+  <Link href={href} className={cn("text-sm font-medium transition-colors text-foreground/70 hover:text-foreground", className)}>
     {children}
   </Link>
 );
@@ -28,7 +29,7 @@ export default function Header() {
        <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <header className="fixed top-0 left-0 right-0 z-40 p-4">
             <div className="flex items-center justify-between p-2 px-4 rounded-lg glassmorphism">
-                <Link href="/" className="text-lg font-black tracking-wider uppercase font-headline">
+                <Link href="/" className="text-lg font-black tracking-wider uppercase font-headline text-metallic">
                 RUDYBTZ
                 </Link>
                 <SheetTrigger asChild>
@@ -60,13 +61,13 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-40 p-4">
       <div className="container mx-auto">
         <div className="flex items-center justify-between px-6 py-3 rounded-lg glassmorphism">
-          <Link href="/" className="text-2xl font-black tracking-wider uppercase font-headline">
+          <Link href="/" className="text-2xl font-black tracking-wider uppercase font-headline text-metallic">
             RUDYBTZ
           </Link>
           <nav className="flex items-center gap-6">
-            <NavLink href="/#albums">Albums</NavLink>
-            <NavLink href="/#bio">Bio</NavLink>
-            <NavLink href="/chat">Chat</NavLink>
+            <NavLink href="/#albums" className="text-metallic">Albums</NavLink>
+            <NavLink href="/#bio" className="text-metallic">Bio</NavLink>
+            <NavLink href="/chat" className="text-metallic">Chat</NavLink>
             <Link href="/admin">
               <Button variant="outline" size="sm" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
                 Admin

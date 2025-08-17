@@ -71,9 +71,17 @@
   body {
     @apply bg-background text-foreground;
   }
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-metallic;
+  }
 }
 
 @layer utilities {
+  .text-metallic {
+      @apply bg-gradient-to-br from-neutral-200 via-neutral-400 to-neutral-500 bg-clip-text text-transparent;
+      text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.2), 0px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
   .glassmorphism {
     background-color: hsla(var(--card-hsl), 0.5);
     -webkit-backdrop-filter: blur(12px);

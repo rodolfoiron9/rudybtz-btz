@@ -135,7 +135,7 @@ export default function AlbumShowcase() {
                                   </Button>
                                   <div className='flex items-baseline gap-3'>
                                     <span className="text-sm text-foreground/50">{index + 1}.</span>
-                                    <p className={cn(nowPlaying?.id === track.id && 'text-accent font-bold')}>{track.title}</p>
+                                    <p className={cn("transition-colors", nowPlaying?.id === track.id && 'text-accent font-bold')}>{track.title}</p>
                                   </div>
                               </div>
                               <span className="text-sm text-foreground/50">{track.duration}</span>
