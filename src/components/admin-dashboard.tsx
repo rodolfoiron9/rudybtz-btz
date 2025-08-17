@@ -193,7 +193,7 @@ export default function AdminDashboard() {
     <div className="min-h-screen p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         <header className="flex flex-col items-center justify-between gap-4 mb-8 md:flex-row">
-          <h1 className="text-3xl font-black tracking-wider text-center uppercase md:text-4xl font-headline">
+          <h1 className="text-3xl font-black tracking-wider text-center uppercase md:text-4xl font-headline text-metallic">
             Admin Panel
           </h1>
           <div className='flex items-center gap-2'>
@@ -215,7 +215,7 @@ export default function AdminDashboard() {
 
           <TabsContent value="albums" className="p-4 mt-4 rounded-xl md:p-6 glassmorphism bg-card/50">
              <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold font-headline">Albums</h2>
+              <h2 className="text-2xl font-bold font-headline text-metallic">Albums</h2>
               <Button onClick={handleAddNewAlbum}><PlusCircle className="w-4 h-4 mr-2" />Add New Album</Button>
             </div>
             <div className="border rounded-lg">
@@ -270,18 +270,18 @@ export default function AdminDashboard() {
           </TabsContent>
           
           <TabsContent value="profile" className="p-4 mt-4 rounded-xl md:p-6 glassmorphism bg-card/50">
-            <h2 className="mb-4 text-2xl font-bold font-headline">Artist Profile</h2>
+            <h2 className="mb-4 text-2xl font-bold font-headline text-metallic">Artist Profile</h2>
             <ProfileForm onSubmit={handleProfileSubmit} initialData={profile} />
           </TabsContent>
 
           <TabsContent value="hero" className="p-4 mt-4 rounded-xl md:p-6 glassmorphism bg-card/50">
-            <h2 className="mb-4 text-2xl font-bold font-headline">Hero Section Slideshow</h2>
+            <h2 className="mb-4 text-2xl font-bold font-headline text-metallic">Hero Section Slideshow</h2>
             <HeroForm onSubmit={handleHeroSubmit} initialData={heroSlides} />
           </TabsContent>
 
           <TabsContent value="roadmap" className="p-4 mt-4 rounded-xl md:p-6 glassmorphism bg-card/50">
              <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold font-headline">Development Roadmap</h2>
+              <h2 className="text-2xl font-bold font-headline text-metallic">Development Roadmap</h2>
               <Button onClick={handleAddNewRoadmapItem}><PlusCircle className="w-4 h-4 mr-2" />Add Roadmap Item</Button>
             </div>
             <div className="border rounded-lg">
@@ -329,13 +329,13 @@ export default function AdminDashboard() {
           </TabsContent>
           
           <TabsContent value="theme" className="p-4 mt-4 rounded-xl md:p-6 glassmorphism bg-card/50">
-            <h2 className="mb-4 text-2xl font-bold font-headline">Visual Theme</h2>
+            <h2 className="mb-4 text-2xl font-bold font-headline text-metallic">Visual Theme</h2>
             <ThemeForm onSubmit={handleThemeSubmit} initialData={themeSettings} />
           </TabsContent>
 
           <TabsContent value="knowledge" className="p-4 mt-4 rounded-xl md:p-6 glassmorphism bg-card/50">
              <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold font-headline">AI Knowledge Base</h2>
+              <h2 className="text-2xl font-bold font-headline text-metallic">AI Knowledge Base</h2>
               <Button disabled><PlusCircle className="w-4 h-4 mr-2" />Add Article (Soon)</Button>
             </div>
              <p className="mb-4 text-sm text-muted-foreground">This section will be used to manage content for fine-tuning AI agents. You can upload text, JSON, and other formats.</p>
@@ -373,7 +373,7 @@ export default function AdminDashboard() {
           </TabsContent>
           
           <TabsContent value="apikeys" className="p-4 mt-4 rounded-xl md:p-6 glassmorphism bg-card/50">
-            <h2 className="mb-4 text-2xl font-bold font-headline">API Keys</h2>
+            <h2 className="mb-4 text-2xl font-bold font-headline text-metallic">API Keys</h2>
             <ApiKeysForm onSubmit={handleApiKeysSubmit} initialData={apiKeys} />
           </TabsContent>
         </Tabs>
