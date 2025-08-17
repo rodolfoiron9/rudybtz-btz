@@ -1,4 +1,4 @@
-import type { Album, Profile, RoadmapItem, ApiKeys, ThemeSettings } from './types';
+import type { Album, Profile, RoadmapItem, ApiKeys, ThemeSettings, HeroSlide } from './types';
 
 export const initialAlbums: Album[] = [
   {
@@ -88,4 +88,12 @@ export const initialThemeSettings: ThemeSettings = {
   primary: '170 80% 50%', // Neon Cyan/Green
   accent: '330 90% 60%' // Neon Magenta/Pink
 };
+
+export const initialHeroSlides: HeroSlide[] = [
+  { id: 'slide-1', type: 'image', url: 'https://placehold.co/1920x1080.png', hint: 'glitch art' },
+  { id: 'slide-2', type: 'video', url: 'https://cdn.pixabay.com/video/2022/10/20/135158-765063811_large.mp4' },
+  { id: 'slide-3', type: 'image', url: 'https://placehold.co/1920x1080.png', hint: 'digital noise' },
+  { id: 'slide-4', type: 'video', url: 'https://cdn.pixabay.com/video/2024/05/27/211518-944207914_large.mp4' },
+  { id: 'slide-5', type: 'image', url: 'https://placehold.co/1920x1080.png', hint: 'neon data stream' },
+];
     

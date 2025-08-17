@@ -3,25 +3,39 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import useLocalStorage from '@/hooks/use-local-storage';
+import { initialHeroSlides } from '@/lib/data';
+import type { HeroSlide } from '@/lib/types';
 
-const backgrounds = [
-  { type: 'image', url: 'https://placehold.co/1920x1080.png', hint: 'glitch art' },
-  { type: 'video', url: 'https://cdn.pixabay.com/video/2022/10/20/135158-765063811_large.mp4', hint: 'cyberpunk circuit' },
-  { type: 'image', url: 'https://placehold.co/1920x1080.png', hint: 'digital noise' },
-  { type: 'video', url: 'https://cdn.pixabay.com/video/2024/05/27/211518-944207914_large.mp4', hint: 'abstract animation' },
-  { type: 'image', url: 'https://placehold.co/1920x1080.png', hint: 'neon data stream' },
-];
 
 export default function HeroSection() {
+  const [backgrounds] = useLocalStorage<HeroSlide[]>('rudybtz-hero-slides', initialHeroSlides);
   const [currentBgIndex, setCurrentBgIndex] = useState(0);
 
   useEffect(() => {
+    if (backgrounds.length === 0) return;
+
     const interval = setInterval(() => {
       setCurrentBgIndex((prevIndex) => (prevIndex + 1) % backgrounds.length);
     }, 7000); // Increased interval for videos
 
     return () => clearInterval(interval);
-  }, []);
+  }, [backgrounds]);
+  
+  if (backgrounds.length === 0) {
+    return (
+        <section className="relative flex items-center justify-center w-full h-screen overflow-hidden bg-background">
+             <div className="relative z-10 text-center text-white">
+                <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-widest uppercase bg-clip-text text-transparent bg-gradient-to-br from-white via-neutral-300 to-neutral-500 drop-shadow-2xl font-headline">
+                RUDYBTZ
+                </h1>
+                <p className="mt-4 text-lg md:text-xl font-light tracking-wider text-primary-foreground/80 font-body">
+                Sonic Architect of the Digital Age
+                </p>
+            </div>
+        </section>
+    )
+  }
 
   return (
     <section className="relative flex items-center justify-center w-full h-screen overflow-hidden">
@@ -32,7 +46,7 @@ export default function HeroSection() {
         if (bg.type === 'video') {
             return (
                 <video
-                    key={index}
+                    key={bg.id}
                     src={bg.url}
                     autoPlay
                     loop
@@ -45,7 +59,7 @@ export default function HeroSection() {
         
         return (
             <Image
-                key={index}
+                key={bg.id}
                 src={bg.url}
                 alt="Hero background"
                 data-ai-hint={bg.hint}

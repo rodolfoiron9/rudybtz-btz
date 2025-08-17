@@ -60,4 +60,11 @@ export interface ThemeSettings {
   primary: string; // HSL string
   accent: string; // HSL string
 }
+
+export interface HeroSlide {
+  id: string;
+  type: 'image' | 'video';
+  url: string;
+  hint?: string;
+}
     
