@@ -2,39 +2,39 @@ import type { Album, Profile, RoadmapItem, ApiKeys, ThemeSettings, HeroSlide } f
 
 export const initialAlbums: Album[] = [
   {
-    id: 'cybernetic-dreams',
-    title: 'Cybernetic Dreams',
-    releaseYear: 2023,
-    coverArt: 'https://placehold.co/500x500.png',
+    id: 'aether-current',
+    title: 'Aether Current',
+    releaseYear: 2024,
+    coverArt: 'https://placehold.co/800x800.png',
     tracks: [
-      { id: 't1', title: 'Neon Pulse', duration: '3:45', url: '' },
-      { id: 't2', title: 'Digital Ghost', duration: '4:12', url: '' },
-      { id: 't3', title: 'Chrome Heart', duration: '5:02', url: '' },
-      { id: 't4', title: 'Data Stream', duration: '2:55', url: '' },
-      { id: 't5', title: 'Future Shock', duration: '4:40', url: '' },
+      { id: 't1', title: 'First Contact', duration: '4:22', url: '' },
+      { id: 't2', title: 'Solar Winds', duration: '5:10', url: '' },
+      { id: 't3', title: 'Event Horizon', duration: '3:56', url: '' },
+      { id: 't4', title: 'Geodesic', duration: '4:48', url: '' },
     ],
   },
   {
-    id: 'old-habits-die-hard',
-    title: 'Old Habits Die Hard',
-    releaseYear: 2021,
-    coverArt: 'https://placehold.co/500x500.png',
+    id: 'silicon-heart',
+    title: 'Silicon Heart',
+    releaseYear: 2022,
+    coverArt: 'https://placehold.co/800x800.png',
     tracks: [
-      { id: 't6', title: 'Starlight Echoes', duration: '4:30', url: '' },
-      { id: 't7', title: 'Zero Gravity', duration: '3:58', url: '' },
-      { id: 't8', title: 'Asteroid Field', duration: '5:15', url: '' },
-      { id: 't9', title: 'Hypersleep', duration: '6:10', url: '' },
+      { id: 't5', title: 'Ghost in the Machine', duration: '3:59', url: '' },
+      { id: 't6', title: 'Chrome Dreams', duration: '4:33', url: '' },
+      { id: 't7', title: 'I/O', duration: '2:50', url: '' },
+      { id: 't8', title: 'The Network', duration: '5:01', url: '' },
+      { id: 't9', title: 'Reboot', duration: '1:30', url: '' },
     ],
   },
     {
-    id: 'grid-runner',
-    title: 'Grid Runner',
-    releaseYear: 2019,
-    coverArt: 'https://placehold.co/500x500.png',
+    id: 'arcology',
+    title: 'Arcology',
+    releaseYear: 2020,
+    coverArt: 'https://placehold.co/800x800.png',
     tracks: [
-      { id: 't10', title: 'Vector', duration: '3:33', url: '' },
-      { id: 't11', title: 'Mainframe', duration: '4:04', url: '' },
-      { id: 't12', title: 'Circuit', duration: '3:50', url: '' },
+      { id: 't10', title: 'Level 101', duration: '4:00', url: '' },
+      { id: 't11', title: 'Neon Canyons', duration: '5:21', url: '' },
+      { id: 't12', title: 'Sky-High', duration: '3:45', url: '' },
     ],
   },
 ];
@@ -90,10 +90,9 @@ export const initialThemeSettings: ThemeSettings = {
 };
 
 export const initialHeroSlides: HeroSlide[] = [
-  { id: 'slide-1', type: 'image', url: 'https://placehold.co/1920x1080.png', hint: 'glitch art' },
-  { id: 'slide-2', type: 'video', url: 'https://cdn.pixabay.com/video/2022/10/20/135158-765063811_large.mp4' },
-  { id: 'slide-3', type: 'image', url: 'https://placehold.co/1920x1080.png', hint: 'digital noise' },
-  { id: 'slide-4', type: 'video', url: 'https://cdn.pixabay.com/video/2024/05/27/211518-944207914_large.mp4' },
-  { id: 'slide-5', type: 'image', url: 'https://placehold.co/1920x1080.png', hint: 'neon data stream' },
+  { id: 'slide-1', type: 'video', url: 'https://cdn.pixabay.com/video/2022/08/24/127118-742498260_large.mp4' },
+  { id: 'slide-2', type: 'image', url: 'https://placehold.co/1920x1080.png', hint: 'abstract circuitry' },
+  { id: 'slide-3', type: 'video', url: 'https://cdn.pixabay.com/video/2022/05/23/117288-718698115_large.mp4' },
+  { id: 'slide-4', type: 'image', url: 'https://placehold.co/1920x1080.png', hint: 'cosmic nebula' },
+  { id: 'slide-5', type: 'video', url: 'https://cdn.pixabay.com/video/2022/09/20/130103-752994191_large.mp4' },
 ];
-    
