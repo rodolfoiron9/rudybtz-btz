@@ -5,28 +5,20 @@ import BioSection from '@/components/bio-section';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
 import HeroSection from '@/components/hero-section';
-import { getAlbums } from '@/lib/firestore';
 import type { Album } from '@/lib/types';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import useLocalStorage from '@/hooks/use-local-storage';
+import { initialAlbums } from '@/lib/data';
 
 export default function Home() {
-  const [albums, setAlbums] = useState<Album[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [albums] = useLocalStorage<Album[]>('rudybtz-albums', initialAlbums);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    const fetchAlbums = async () => {
-      try {
-        setIsLoading(true);
-        const albumsData = await getAlbums();
-        setAlbums(albumsData);
-      } catch (error) {
-        console.error("Error fetching albums: ", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchAlbums();
+    // This ensures that the component only renders on the client
+    // where localStorage is available, preventing hydration mismatches.
+    setIsClient(true);
   }, []);
 
   return (
@@ -35,7 +27,7 @@ export default function Home() {
       <main className="flex-grow">
         <HeroSection />
         <div id="albums" className="py-20 md:py-32">
-         {isLoading ? (
+         {!isClient ? (
             <div className="container mx-auto space-y-12">
                 <div className="text-center">
                     <h2 className="mb-4 text-4xl font-black tracking-wider uppercase md:text-6xl font-headline">Discography</h2>

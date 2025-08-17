@@ -30,10 +30,10 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import useLocalStorage from '@/hooks/use-local-storage';
-import { initialProfile, initialApiKeys, initialHeroSlides } from '@/lib/data';
-import { getAlbums, addAlbum, updateAlbum, deleteAlbum } from '@/lib/firestore';
-import { getRoadmapItems, addRoadmapItem, updateRoadmapItem, deleteRoadmapItem } from '@/lib/roadmap-firestore';
-import { getThemeSettings, updateThemeSettings } from '@/lib/theme-firestore';
+import { initialProfile, initialApiKeys, initialHeroSlides, initialAlbums, initialRoadmap } from '@/lib/data';
+import { getAlbums as getAlbumsFromDb, addAlbum, updateAlbum, deleteAlbum } from '@/lib/firestore';
+import { getRoadmapItems as getRoadmapItemsFromDb, addRoadmapItem, updateRoadmapItem, deleteRoadmapItem } from '@/lib/roadmap-firestore';
+import { getArticles as getArticlesFromDb } from '@/lib/knowledge-firestore';
 import type { Album, Profile, RoadmapItem, KnowledgeArticle, ApiKeys, ThemeSettings, HeroSlide } from '@/lib/types';
 import AlbumForm from './album-form';
 import ProfileForm from './profile-form';
@@ -43,22 +43,23 @@ import ThemeForm from './theme-form';
 import HeroForm from './hero-form';
 import { Home, LogOut, Music, Pencil, PlusCircle, Trash, User, Map, Loader2, BrainCircuit, Key, Palette, Film } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { getArticles } from '@/lib/knowledge-firestore';
 import { useThemeStorage } from '@/hooks/use-theme-storage.tsx';
 
 
 export default function AdminDashboard() {
   const router = useRouter();
   const { toast } = useToast();
-  const [albums, setAlbums] = useState<Album[]>([]);
-  const [roadmap, setRoadmap] = useState<RoadmapItem[]>([]);
-  const [articles, setArticles] = useState<KnowledgeArticle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Local Storage States
   const [profile, setProfile] = useLocalStorage<Profile>('rudybtz-profile', initialProfile);
   const [apiKeys, setApiKeys] = useLocalStorage<ApiKeys>('rudybtz-apikeys', initialApiKeys);
   const [heroSlides, setHeroSlides] = useLocalStorage<HeroSlide[]>('rudybtz-hero-slides', initialHeroSlides);
-
+  const [albums, setAlbums] = useLocalStorage<Album[]>('rudybtz-albums', initialAlbums);
+  
+  // DB-driven states
+  const [roadmap, setRoadmap] = useState<RoadmapItem[]>([]);
+  const [articles, setArticles] = useState<KnowledgeArticle[]>([]);
   const { themeSettings, setThemeSettings } = useThemeStorage();
 
   const [isAlbumFormOpen, setIsAlbumFormOpen] = useState(false);
@@ -72,9 +73,9 @@ export default function AdminDashboard() {
       try {
         setIsLoading(true);
         const [albumsData, articlesData, roadmapData] = await Promise.all([
-          getAlbums(),
-          getArticles(),
-          getRoadmapItems(),
+          getAlbumsFromDb(),
+          getArticlesFromDb(),
+          getRoadmapItemsFromDb(),
         ]);
         setAlbums(albumsData);
         setArticles(articlesData);
@@ -91,7 +92,7 @@ export default function AdminDashboard() {
       }
     };
     fetchData();
-  }, [toast]);
+  }, [toast, setAlbums]);
 
   const handleLogout = () => {
     window.localStorage.removeItem('rudybtz-admin-auth');
@@ -195,14 +196,14 @@ export default function AdminDashboard() {
 
   const handleThemeSubmit = async (data: ThemeSettings) => {
     try {
-      await updateThemeSettings(data);
-      setThemeSettings(data);
+      if (setThemeSettings) {
+        setThemeSettings(data); // Update local context
+      }
+      // No need to call updateThemeSettings here if useThemeStorage handles it
       toast({
         title: 'Theme Updated',
         description: 'Your new theme settings have been saved.',
       });
-      // Optional: force reload to ensure styles are applied everywhere, though ThemeProvider should handle it.
-      // window.location.reload(); 
     } catch (error) {
       console.error("Error saving theme: ", error);
       toast({ variant: 'destructive', title: 'Error', description: 'Failed to save theme settings.' });
