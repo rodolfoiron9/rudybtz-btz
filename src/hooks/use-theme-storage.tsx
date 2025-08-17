@@ -22,6 +22,7 @@ export function ThemeStorageProvider({ children }: { children: React.ReactNode }
 
     useEffect(() => {
         const fetchTheme = async () => {
+            setIsLoading(true);
             try {
                 const settings = await getThemeSettings();
                 setThemeSettings(settings);
