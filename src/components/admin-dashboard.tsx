@@ -30,8 +30,9 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import useLocalStorage from '@/hooks/use-local-storage';
-import { initialProfile, initialRoadmap, initialApiKeys, initialThemeSettings, initialHeroSlides } from '@/lib/data';
+import { initialProfile, initialApiKeys, initialThemeSettings, initialHeroSlides } from '@/lib/data';
 import { getAlbums, addAlbum, updateAlbum, deleteAlbum } from '@/lib/firestore';
+import { getRoadmapItems, addRoadmapItem, updateRoadmapItem, deleteRoadmapItem } from '@/lib/roadmap-firestore';
 import type { Album, Profile, RoadmapItem, KnowledgeArticle, ApiKeys, ThemeSettings, HeroSlide } from '@/lib/types';
 import AlbumForm from './album-form';
 import ProfileForm from './profile-form';
@@ -48,13 +49,14 @@ export default function AdminDashboard() {
   const router = useRouter();
   const { toast } = useToast();
   const [albums, setAlbums] = useState<Album[]>([]);
+  const [roadmap, setRoadmap] = useState<RoadmapItem[]>([]);
+  const [articles, setArticles] = useState<KnowledgeArticle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
   const [profile, setProfile] = useLocalStorage<Profile>('rudybtz-profile', initialProfile);
-  const [roadmap, setRoadmap] = useLocalStorage<RoadmapItem[]>('rudybtz-roadmap', initialRoadmap);
   const [apiKeys, setApiKeys] = useLocalStorage<ApiKeys>('rudybtz-apikeys', initialApiKeys);
   const [themeSettings, setThemeSettings] = useLocalStorage<ThemeSettings>('rudybtz-theme', initialThemeSettings);
   const [heroSlides, setHeroSlides] = useLocalStorage<HeroSlide[]>('rudybtz-hero-slides', initialHeroSlides);
-  const [articles, setArticles] = useState<KnowledgeArticle[]>([]);
 
   const [isAlbumFormOpen, setIsAlbumFormOpen] = useState(false);
   const [editingAlbum, setEditingAlbum] = useState<Album | null>(null);
@@ -66,12 +68,14 @@ export default function AdminDashboard() {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const [albumsData, articlesData] = await Promise.all([
+        const [albumsData, articlesData, roadmapData] = await Promise.all([
           getAlbums(),
-          getArticles()
+          getArticles(),
+          getRoadmapItems(),
         ]);
         setAlbums(albumsData);
         setArticles(articlesData);
+        setRoadmap(roadmapData);
       } catch (error) {
         console.error("Error fetching data: ", error);
         toast({
@@ -148,17 +152,33 @@ export default function AdminDashboard() {
     setIsRoadmapFormOpen(true);
   };
 
-  const handleDeleteRoadmapItem = (itemId: string) => {
-    setRoadmap(roadmap.filter((item) => item.id !== itemId));
+  const handleDeleteRoadmapItem = async (itemId: string) => {
+    try {
+        await deleteRoadmapItem(itemId);
+        setRoadmap(roadmap.filter((item) => item.id !== itemId));
+        toast({ title: 'Success', description: 'Roadmap item deleted.' });
+    } catch (error) {
+        console.error("Error deleting roadmap item: ", error);
+        toast({ variant: 'destructive', title: 'Error', description: 'Failed to delete roadmap item.' });
+    }
   };
   
-  const handleRoadmapFormSubmit = (data: RoadmapItem) => {
-    if (editingRoadmapItem) {
-      setRoadmap(roadmap.map((item) => (item.id === data.id ? data : item)));
-    } else {
-      setRoadmap([...roadmap, { ...data, id: `roadmap-${Date.now()}` }]);
+  const handleRoadmapFormSubmit = async (data: RoadmapItem) => {
+    try {
+        if (editingRoadmapItem) {
+            await updateRoadmapItem(data.id, data);
+            setRoadmap(roadmap.map((item) => (item.id === data.id ? data : item)));
+            toast({ title: 'Success', description: 'Roadmap item updated.' });
+        } else {
+            const docRef = await addRoadmapItem(data);
+            setRoadmap([...roadmap, { ...data, id: docRef.id }]);
+            toast({ title: 'Success', description: 'Roadmap item added.' });
+        }
+        setIsRoadmapFormOpen(false);
+    } catch (error) {
+        console.error("Error saving roadmap item: ", error);
+        toast({ variant: 'destructive', title: 'Error', description: 'Failed to save roadmap item.' });
     }
-    setIsRoadmapFormOpen(false);
   };
 
 
@@ -295,7 +315,13 @@ export default function AdminDashboard() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {roadmap.map((item) => (
+                    {isLoading ? (
+                       <TableRow>
+                        <TableCell colSpan={4} className="text-center h-24">
+                          <Loader2 className="w-6 h-6 animate-spin mx-auto"/>
+                        </TableCell>
+                      </TableRow>
+                    ) : roadmap.map((item) => (
                     <TableRow key={item.id}>
                         <TableCell className="font-medium">{item.title}</TableCell>
                         <TableCell><Badge variant={getStatusBadgeVariant(item.status)}>{item.status}</Badge></TableCell>

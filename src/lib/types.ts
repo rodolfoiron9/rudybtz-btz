@@ -25,7 +25,7 @@ export interface Profile {
 }
 
 export interface RoadmapItem {
-  id:string;
+  id: string;
   title: string;
   description: string;
   status: 'Completed' | 'In Progress' | 'Planned';

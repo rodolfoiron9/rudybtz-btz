@@ -57,7 +57,10 @@ export default function RoadmapForm({ isOpen, onOpenChange, onSubmit, initialDat
 
   useEffect(() => {
     if (initialData) {
-      form.reset(initialData);
+      form.reset({
+        ...initialData,
+        dueDate: initialData.dueDate ? new Date(initialData.dueDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+      });
     } else {
       form.reset({
         title: '',
