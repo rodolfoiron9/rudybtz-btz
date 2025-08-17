@@ -36,7 +36,7 @@ const formSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(2, 'Title must be at least 2 characters.'),
   releaseYear: z.coerce.number().min(1900, 'Invalid year.').max(new Date().getFullYear() + 5),
-  coverArt: z.string().url('Must be a valid URL or data URI.'),
+  coverArt: z.string().url('Must be a valid URL.'),
   tracks: z.array(z.object({
       id: z.string().optional(),
       title: z.string().min(1, 'Track title cannot be empty.'),
@@ -101,16 +101,23 @@ export default function AlbumForm({ isOpen, onOpenChange, onSubmit, initialData 
     onSubmit(data as Album);
   };
   
-  const handleCoverArtFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCoverArtFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (file) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-              const dataUri = reader.result as string;
-              form.setValue('coverArt', dataUri);
-              setCoverArtPreview(dataUri);
-          };
-          reader.readAsDataURL(file);
+        setIsUploading(true);
+         try {
+            const storageRef = ref(storage, `album-covers/${file.name}-${Date.now()}`);
+            await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+            form.setValue('coverArt', downloadURL, { shouldValidate: true });
+            setCoverArtPreview(downloadURL);
+            toast({ title: 'Cover art uploaded!' });
+        } catch (error) {
+            console.error('Upload failed', error);
+            toast({ variant: 'destructive', title: 'Upload Failed', description: 'Could not upload cover art.' });
+        } finally {
+            setIsUploading(false);
+        }
       }
   }
 
@@ -122,7 +129,7 @@ export default function AlbumForm({ isOpen, onOpenChange, onSubmit, initialData 
     setIsGenerating(true);
     try {
         const result = await generateAlbumArt(watchTitle);
-        form.setValue('coverArt', result.imageUrl);
+        form.setValue('coverArt', result.imageUrl, { shouldValidate: true });
         setCoverArtPreview(result.imageUrl);
         toast({ title: 'Cover art generated!', description: 'A new cover has been created and applied.' });
     } catch (error) {
@@ -192,7 +199,12 @@ export default function AlbumForm({ isOpen, onOpenChange, onSubmit, initialData 
               <div className='space-y-2'>
                   <FormLabel>Cover Art</FormLabel>
                    <div className="relative w-full aspect-square rounded-md border border-dashed border-input flex items-center justify-center bg-background/30">
-                     {coverArtPreview ? (
+                     {isUploading || isGenerating ? (
+                        <div className='flex flex-col items-center gap-2 text-muted-foreground'>
+                            <Loader className="animate-spin w-8 h-8"/>
+                            <span>{isGenerating ? 'Generating...' : 'Uploading...'}</span>
+                        </div>
+                     ) : coverArtPreview ? (
                         <Image src={coverArtPreview} alt="Cover art preview" layout="fill" className="object-cover rounded-md" />
                      ) : (
                         <span className="text-sm text-muted-foreground">Image Preview</span>
@@ -202,16 +214,16 @@ export default function AlbumForm({ isOpen, onOpenChange, onSubmit, initialData 
                         <FormField name="coverArt" control={form.control} render={() => (
                             <FormItem className="flex-grow">
                                 <FormControl>
-                                    <Input id="cover-art-upload" type="file" accept="image/*" onChange={handleCoverArtFileChange} className="sr-only" />
+                                    <Input id="cover-art-upload" type="file" accept="image/*" onChange={handleCoverArtFileChange} className="sr-only" disabled={isUploading || isGenerating} />
                                 </FormControl>
-                                <Button type="button" asChild variant="outline" className="w-full">
+                                <Button type="button" asChild variant="outline" className="w-full" disabled={isUploading || isGenerating}>
                                     <label htmlFor="cover-art-upload">Upload Image</label>
                                 </Button>
                             </FormItem>
                         )} />
-                        <Button type="button" onClick={handleGenerateArt} disabled={isGenerating || !watchTitle}>
-                            {isGenerating ? <Loader className="animate-spin"/> : <Sparkles />}
-                            Generate with AI
+                        <Button type="button" onClick={handleGenerateArt} disabled={isGenerating || isUploading || !watchTitle}>
+                            <Sparkles className="w-4 h-4 mr-2" />
+                            Generate
                         </Button>
                    </div>
                    <FormMessage>{form.formState.errors.coverArt?.message}</FormMessage>
@@ -221,7 +233,7 @@ export default function AlbumForm({ isOpen, onOpenChange, onSubmit, initialData 
             <div>
               <FormLabel>Tracks</FormLabel>
                <div className="mt-2 space-y-2">
-                {isUploading && <Progress value={uploadProgress} className="w-full" />}
+                {isUploading && fields.find(f => f.url === '') && <Progress value={uploadProgress} className="w-full h-2" />}
                 {fields.map((field, index) => (
                   <div key={field.id} className="flex items-center gap-2 p-2 rounded-md bg-foreground/5">
                      <p className='flex-grow font-medium'>{field.title}</p>
@@ -235,6 +247,7 @@ export default function AlbumForm({ isOpen, onOpenChange, onSubmit, initialData 
                 <UploadCloud className="w-4 h-4 mr-2" />
                 {isUploading ? 'Uploading...' : 'Upload Track'}
               </Button>
+              <FormMessage>{form.formState.errors.tracks?.message}</FormMessage>
             </div>
 
             <DialogFooter className="sticky bottom-0 !mt-8">
