@@ -44,7 +44,7 @@ import ThemeForm from './theme-form';
 import HeroForm from './hero-form';
 import { Home, LogOut, Music, Pencil, PlusCircle, Trash, User, Map, Loader2, BrainCircuit, Key, Palette, Film } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useThemeStorage } from '@/hooks/use-theme-storage.tsx';
+import { useThemeStorage } from '@/hooks/use-theme-storage';
 
 
 export default function AdminDashboard() {
@@ -72,7 +72,6 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsLoading(true);
         const [albumsData, articlesData, roadmapData, themeData] = await Promise.all([
           getAlbumsFromDb(),
           getArticlesFromDb(),
@@ -182,7 +181,7 @@ export default function AdminDashboard() {
             const docRef = await addRoadmapItem(data);
             setRoadmap([...roadmap, { ...data, id: docRef.id }]);
             toast({ title: 'Success', description: 'Roadmap item added.' });
-        }
+            }
         setIsRoadmapFormOpen(false);
     } catch (error) {
         console.error("Error saving roadmap item: ", error);
@@ -227,7 +226,7 @@ export default function AdminDashboard() {
     }
   }
   
-  if (isThemeLoading || !themeSettings) {
+  if (isLoading || isThemeLoading || !themeSettings) {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-4 space-y-4 bg-background">
           <Loader2 className="w-12 h-12 animate-spin text-primary"/>
@@ -275,13 +274,7 @@ export default function AdminDashboard() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {isLoading ? (
-                      <TableRow>
-                        <TableCell colSpan={4} className="text-center h-24">
-                          <Loader2 className="w-6 h-6 animate-spin mx-auto"/>
-                        </TableCell>
-                      </TableRow>
-                    ) : albums.map((album) => (
+                    {albums.map((album) => (
                     <TableRow key={album.id}>
                         <TableCell><img src={album.coverArt} alt={album.title} className="w-12 h-12 rounded-md object-cover" /></TableCell>
                         <TableCell className="font-medium">{album.title}</TableCell>
@@ -341,13 +334,7 @@ export default function AdminDashboard() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {isLoading ? (
-                       <TableRow>
-                        <TableCell colSpan={4} className="text-center h-24">
-                          <Loader2 className="w-6 h-6 animate-spin mx-auto"/>
-                        </TableCell>
-                      </TableRow>
-                    ) : roadmap.map((item) => (
+                    {roadmap.map((item) => (
                     <TableRow key={item.id}>
                         <TableCell className="font-medium">{item.title}</TableCell>
                         <TableCell><Badge variant={getStatusBadgeVariant(item.status)}>{item.status}</Badge></TableCell>
@@ -402,13 +389,7 @@ export default function AdminDashboard() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {isLoading ? (
-                       <TableRow>
-                        <TableCell colSpan={4} className="text-center h-24">
-                          <Loader2 className="w-6 h-6 animate-spin mx-auto"/>
-                        </TableCell>
-                      </TableRow>
-                    ) : articles.map((article) => (
+                    {articles.map((article) => (
                       <TableRow key={article.id}>
                         <TableCell className="font-medium">{article.title}</TableCell>
                         <TableCell><Badge variant="outline">{article.format}</Badge></TableCell>
@@ -446,3 +427,5 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
+    
