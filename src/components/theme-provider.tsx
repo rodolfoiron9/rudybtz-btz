@@ -1,15 +1,14 @@
 'use client';
 
 import { useEffect } from 'react';
-import useLocalStorage from '@/hooks/use-local-storage';
-import { initialThemeSettings } from '@/lib/data';
-import type { ThemeSettings } from '@/lib/types';
+import { useThemeStorage } from '@/hooks/use-theme-storage.tsx';
+import { Loader2 } from 'lucide-react';
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [themeSettings] = useLocalStorage<ThemeSettings>('rudybtz-theme', initialThemeSettings);
+  const { themeSettings, isLoading } = useThemeStorage();
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (themeSettings && typeof window !== 'undefined') {
       const root = document.documentElement;
 
       // Apply background
@@ -24,10 +23,16 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
       // Apply colors
       root.style.setProperty('--primary-hsl', themeSettings.primary);
       root.style.setProperty('--accent-hsl', themeSettings.accent);
-      
     }
   }, [themeSettings]);
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-background">
+        <Loader2 className="w-12 h-12 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return <>{children}</>;
 }
-    

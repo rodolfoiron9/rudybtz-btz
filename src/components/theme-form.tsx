@@ -36,22 +36,19 @@ interface ThemeFormProps {
 }
 
 export default function ThemeForm({ onSubmit, initialData }: ThemeFormProps) {
-  const { toast } = useToast();
   const form = useForm<ThemeFormValues>({
     resolver: zodResolver(themeSchema),
     defaultValues: initialData,
   });
 
   useEffect(() => {
-    form.reset(initialData);
+    if (initialData) {
+      form.reset(initialData);
+    }
   }, [initialData, form]);
 
   const handleFormSubmit = (data: ThemeFormValues) => {
     onSubmit(data);
-    toast({
-        title: 'Theme Updated',
-        description: 'Your changes have been saved. The page will now reload.',
-    });
   };
 
   return (
@@ -149,4 +146,5 @@ export default function ThemeForm({ onSubmit, initialData }: ThemeFormProps) {
     </Form>
   );
 }
+    
     
