@@ -18,6 +18,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import type { ThemeSettings } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect } from 'react';
+import { updateThemeSettings } from '@/lib/theme-firestore';
 
 const themeSchema = z.object({
   background: z.object({
@@ -36,6 +37,7 @@ interface ThemeFormProps {
 }
 
 export default function ThemeForm({ onSubmit, initialData }: ThemeFormProps) {
+  const { toast } = useToast();
   const form = useForm<ThemeFormValues>({
     resolver: zodResolver(themeSchema),
     defaultValues: initialData,
@@ -47,8 +49,22 @@ export default function ThemeForm({ onSubmit, initialData }: ThemeFormProps) {
     }
   }, [initialData, form]);
 
-  const handleFormSubmit = (data: ThemeFormValues) => {
-    onSubmit(data);
+  const handleFormSubmit = async (data: ThemeFormValues) => {
+    onSubmit(data); // This updates the local state via the context
+    try {
+        await updateThemeSettings(data); // This updates firestore
+        toast({
+            title: 'Theme Updated',
+            description: 'Your changes have been saved successfully.',
+        });
+    } catch (error) {
+        console.error("Failed to save theme to firestore", error);
+        toast({
+            variant: 'destructive',
+            title: 'Save Failed',
+            description: 'Could not save theme settings to the database.',
+        });
+    }
   };
 
   return (

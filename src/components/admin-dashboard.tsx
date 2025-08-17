@@ -34,6 +34,7 @@ import { initialProfile, initialApiKeys, initialHeroSlides, initialAlbums, initi
 import { getAlbums as getAlbumsFromDb, addAlbum, updateAlbum, deleteAlbum } from '@/lib/firestore';
 import { getRoadmapItems as getRoadmapItemsFromDb, addRoadmapItem, updateRoadmapItem, deleteRoadmapItem } from '@/lib/roadmap-firestore';
 import { getArticles as getArticlesFromDb } from '@/lib/knowledge-firestore';
+import { getThemeSettings } from '@/lib/theme-firestore';
 import type { Album, Profile, RoadmapItem, KnowledgeArticle, ApiKeys, ThemeSettings, HeroSlide } from '@/lib/types';
 import AlbumForm from './album-form';
 import ProfileForm from './profile-form';
@@ -60,7 +61,7 @@ export default function AdminDashboard() {
   // DB-driven states
   const [roadmap, setRoadmap] = useState<RoadmapItem[]>([]);
   const [articles, setArticles] = useState<KnowledgeArticle[]>([]);
-  const { themeSettings, setThemeSettings } = useThemeStorage();
+  const { themeSettings, setThemeSettings, isLoading: isThemeLoading } = useThemeStorage();
 
   const [isAlbumFormOpen, setIsAlbumFormOpen] = useState(false);
   const [editingAlbum, setEditingAlbum] = useState<Album | null>(null);
@@ -72,14 +73,18 @@ export default function AdminDashboard() {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const [albumsData, articlesData, roadmapData] = await Promise.all([
+        const [albumsData, articlesData, roadmapData, themeData] = await Promise.all([
           getAlbumsFromDb(),
           getArticlesFromDb(),
           getRoadmapItemsFromDb(),
+          getThemeSettings(),
         ]);
         setAlbums(albumsData);
         setArticles(articlesData);
         setRoadmap(roadmapData);
+        if (setThemeSettings) {
+          setThemeSettings(themeData);
+        }
       } catch (error) {
         console.error("Error fetching data: ", error);
         toast({
@@ -92,7 +97,7 @@ export default function AdminDashboard() {
       }
     };
     fetchData();
-  }, [toast, setAlbums]);
+  }, [toast, setAlbums, setThemeSettings]);
 
   const handleLogout = () => {
     window.localStorage.removeItem('rudybtz-admin-auth');
@@ -197,9 +202,8 @@ export default function AdminDashboard() {
   const handleThemeSubmit = async (data: ThemeSettings) => {
     try {
       if (setThemeSettings) {
-        setThemeSettings(data); // Update local context
+        setThemeSettings(data);
       }
-      // No need to call updateThemeSettings here if useThemeStorage handles it
       toast({
         title: 'Theme Updated',
         description: 'Your new theme settings have been saved.',
@@ -223,7 +227,7 @@ export default function AdminDashboard() {
     }
   }
   
-  if (!themeSettings) {
+  if (isThemeLoading || !themeSettings) {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-4 space-y-4 bg-background">
           <Loader2 className="w-12 h-12 animate-spin text-primary"/>

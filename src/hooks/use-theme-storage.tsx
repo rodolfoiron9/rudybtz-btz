@@ -1,45 +1,39 @@
 
 'use client';
 
-import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext } from 'react';
-import { getThemeSettings, updateThemeSettings } from '@/lib/theme-firestore';
+import { useState, useEffect, createContext, useContext } from 'react';
 import type { ThemeSettings } from '@/lib/types';
+import { initialThemeSettings } from '@/lib/data';
+import useLocalStorage from './use-local-storage';
+import { updateThemeSettings } from '@/lib/theme-firestore';
 
-// A bit of a workaround to get a reactive theme context
-// This avoids needing to pass theme down as props everywhere
 
 interface ThemeContextType {
-    themeSettings: ThemeSettings | null;
-    setThemeSettings: ((newSettings: ThemeSettings) => void) | null;
+    themeSettings: ThemeSettings;
+    setThemeSettings: ((newSettings: ThemeSettings) => void);
     isLoading: boolean;
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+const ThemeContext = createContext<ThemeContextType>({
+    themeSettings: initialThemeSettings,
+    setThemeSettings: () => {},
+    isLoading: true,
+});
 
 export function ThemeStorageProvider({ children }: { children: React.ReactNode }) {
-    const [themeSettings, internalSetThemeSettings] = useState<ThemeSettings | null>(null);
+    const [settings, setSettings] = useLocalStorage<ThemeSettings>('rudybtz-theme', initialThemeSettings);
     const [isLoading, setIsLoading] = useState(true);
-
+    
+    // On initial load, we use the settings from local storage.
+    // The loading state is just to prevent flashes of unstyled content.
     useEffect(() => {
-        const fetchTheme = async () => {
-            setIsLoading(true);
-            try {
-                const settings = await getThemeSettings();
-                internalSetThemeSettings(settings);
-            } catch (error) {
-                console.error("Failed to fetch theme settings:", error);
-                 // Fallback to initial settings if fetch fails
-                internalSetThemeSettings(null);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchTheme();
+        setIsLoading(false);
     }, []);
 
     const setThemeSettings = async (newSettings: ThemeSettings) => {
-        internalSetThemeSettings(newSettings);
+        setSettings(newSettings);
         try {
+            // We still want to persist to the database when changes are made.
             await updateThemeSettings(newSettings);
         } catch (error) {
             console.error("Failed to update theme settings in Firestore:", error);
@@ -48,7 +42,7 @@ export function ThemeStorageProvider({ children }: { children: React.ReactNode }
 
 
     return (
-        <ThemeContext.Provider value={{ themeSettings, setThemeSettings, isLoading }}>
+        <ThemeContext.Provider value={{ themeSettings: settings, setThemeSettings, isLoading }}>
             {children}
         </ThemeContext.Provider>
     )
