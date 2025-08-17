@@ -6,12 +6,12 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  projectId: "rudybtz-portfolio",
-  appId: "1:759447585600:web:fde69b293f6614a60df0a5",
-  storageBucket: "rudybtz-portfolio.appspot.com",
   apiKey: "AIzaSyDM4GK_qDt4PWr2iql1zU869Nmf3MmrVHk",
   authDomain: "rudybtz-portfolio.firebaseapp.com",
+  projectId: "rudybtz-portfolio",
+  storageBucket: "rudybtz-portfolio.firebasestorage.app",
   messagingSenderId: "759447585600",
+  appId: "1:759447585600:web:748fe6367a5ddd0c0df0a5"
 };
 
 // Initialize Firebase
