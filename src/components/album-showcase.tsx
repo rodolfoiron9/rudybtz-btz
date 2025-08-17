@@ -4,17 +4,14 @@ import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { Album, Track } from '@/lib/types';
-import { ListMusic, Play, Pause, Loader2 } from 'lucide-react';
+import { ListMusic, Play, Pause } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
-import { getAlbums } from '@/lib/firestore';
 import { Skeleton } from './ui/skeleton';
 
 
-export default function AlbumShowcase() {
-  const [albums, setAlbums] = useState<Album[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+export default function AlbumShowcase({ albums }: { albums: Album[] }) {
   const [isClient, setIsClient] = useState(false);
   const [nowPlaying, setNowPlaying] = useState<Track | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -22,18 +19,6 @@ export default function AlbumShowcase() {
 
   useEffect(() => {
     setIsClient(true);
-    const fetchAlbums = async () => {
-      try {
-        setIsLoading(true);
-        const albumsData = await getAlbums();
-        setAlbums(albumsData);
-      } catch (error) {
-        console.error("Error fetching albums: ", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchAlbums();
   }, []);
 
   useEffect(() => {
@@ -62,7 +47,7 @@ export default function AlbumShowcase() {
     }
   }
 
-  if (!isClient || isLoading) {
+  if (!isClient) {
     return (
        <div className="container mx-auto space-y-12">
           <div className="text-center">
