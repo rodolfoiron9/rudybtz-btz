@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={fontVariables}>
       <body
-        className={`${inter.className} antialiased`}
+        className="font-sans antialiased"
       >
         <AuthProvider>
           <PerformanceMonitor

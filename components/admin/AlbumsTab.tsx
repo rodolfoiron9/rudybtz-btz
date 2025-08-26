@@ -52,7 +52,7 @@ export default function AlbumsTab() {
           description: albumData.description,
           releaseDate: new Date(albumData.releaseDate),
           genre: albumData.genre,
-          mood: albumData.mood || '',
+          mood: '', // Default mood since it's not in the form data
           coverArtUrl: albumData.coverArt?.downloadURL || '',
           trackIds: albumData.tracks.map((track: UploadResult, index: number) => `${selectedAlbum.id}_track_${index}`)
         });
@@ -63,7 +63,7 @@ export default function AlbumsTab() {
           description: albumData.description,
           releaseDate: new Date(albumData.releaseDate),
           genre: albumData.genre,
-          mood: albumData.mood || '',
+          mood: '', // Default mood since it's not in the form data
           coverArtUrl: albumData.coverArt?.downloadURL || '',
           trackIds: albumData.tracks.map((track: UploadResult, index: number) => `new_album_track_${index}`)
         });
@@ -71,16 +71,18 @@ export default function AlbumsTab() {
         // Create tracks for the new album
         for (let i = 0; i < albumData.tracks.length; i++) {
           const track = albumData.tracks[i];
-          await tracksService.create({
-            title: track.fileName.replace(/\.[^/.]+$/, ""), // Remove extension
-            albumId: newAlbumId,
-            audioUrl: track.downloadURL,
-            duration: 180, // Default duration, should be calculated from actual file
-            visualizationSettings: {
-              presetId: 'default',
-              lyricsDisplay: 'below'
-            }
-          });
+          if (track) {
+            await tracksService.create({
+              title: track.fileName.replace(/\.[^/.]+$/, ""), // Remove extension
+              albumId: newAlbumId,
+              audioUrl: track.downloadURL,
+              duration: 180, // Default duration, should be calculated from actual file
+              visualizationSettings: {
+                presetId: 'default',
+                lyricsDisplay: 'below'
+              }
+            });
+          }
         }
       }
       
