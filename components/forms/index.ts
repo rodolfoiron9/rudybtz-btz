@@ -1,1 +1,1 @@
-export { AlbumUploadForm } from './album-upload-form';
+export { AlbumUploadForm, type AlbumFormData } from './album-upload-form';

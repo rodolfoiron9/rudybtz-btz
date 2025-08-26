@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { AlbumUploadForm } from '@/components/forms';
+import { AlbumUploadForm, type AlbumFormData } from '@/components/forms';
 import { Plus, Edit, Trash2, Music } from 'lucide-react';
 import { albumsService, tracksService } from '@/lib/services';
 import type { Album, Track } from '@/lib/types';
@@ -57,7 +57,7 @@ export default function AlbumsTab() {
         });
       } else {
         // Create new album
-        const newAlbum = await albumsService.create({
+        const newAlbumId = await albumsService.create({
           title: albumData.title,
           description: albumData.description,
           releaseDate: new Date(albumData.releaseDate),
@@ -71,13 +71,14 @@ export default function AlbumsTab() {
         for (let i = 0; i < albumData.tracks.length; i++) {
           const track = albumData.tracks[i];
           await tracksService.create({
-            id: `${newAlbum.id}_track_${i}`,
             title: track.fileName.replace(/\.[^/.]+$/, ""), // Remove extension
-            albumId: newAlbum.id,
+            albumId: newAlbumId,
             audioUrl: track.downloadURL,
             duration: 180, // Default duration, should be calculated from actual file
-            trackNumber: i + 1,
-            waveformData: []
+            visualizationSettings: {
+              presetId: 'default',
+              lyricsDisplay: 'below'
+            }
           });
         }
       }
@@ -154,20 +155,22 @@ export default function AlbumsTab() {
             <AlbumUploadForm
               onSave={handleSaveAlbum}
               onCancel={() => setIsDialogOpen(false)}
-              initialData={selectedAlbum ? {
+              initialData={selectedAlbum ? ({
                 title: selectedAlbum.title,
                 description: selectedAlbum.description || '',
                 releaseDate: selectedAlbum.releaseDate?.toISOString().split('T')[0] || '',
                 genre: selectedAlbum.genre,
-                price: '9.99', // Default price, should be added to Album type
-                coverArt: selectedAlbum.coverArtUrl ? {
-                  downloadURL: selectedAlbum.coverArtUrl,
-                  fileName: 'cover.jpg',
-                  size: 0,
-                  contentType: 'image/jpeg'
-                } : undefined,
-                tracks: [] // Will be loaded and populated separately
-              } : undefined}
+                price: '9.99',
+                ...(selectedAlbum.coverArtUrl ? {
+                  coverArt: {
+                    downloadURL: selectedAlbum.coverArtUrl,
+                    fileName: 'cover.jpg',
+                    size: 0,
+                    contentType: 'image/jpeg'
+                  }
+                } : {}),
+                tracks: []
+              } satisfies Partial<AlbumFormData>) : undefined}
               isEditing={!!selectedAlbum}
             />
           </DialogContent>

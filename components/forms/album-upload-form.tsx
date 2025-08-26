@@ -20,20 +20,20 @@ import {
 } from 'lucide-react';
 import { UploadResult, STORAGE_PATHS } from '@/lib/file-upload-service';
 
-interface AlbumFormData {
+export interface AlbumFormData {
   title: string;
   description: string;
   releaseDate: string;
   genre: string;
   price: string;
-  coverArt?: UploadResult;
+  coverArt: UploadResult | undefined;
   tracks: UploadResult[];
 }
 
 interface AlbumUploadFormProps {
   onSave?: (album: AlbumFormData) => void;
   onCancel?: () => void;
-  initialData?: Partial<AlbumFormData>;
+  initialData?: Partial<AlbumFormData> | undefined;
   isEditing?: boolean;
 }
 
@@ -49,7 +49,7 @@ export function AlbumUploadForm({
     releaseDate: initialData?.releaseDate || '',
     genre: initialData?.genre || '',
     price: initialData?.price || '',
-    coverArt: initialData?.coverArt,
+    coverArt: initialData?.coverArt || undefined,
     tracks: initialData?.tracks || []
   });
 
