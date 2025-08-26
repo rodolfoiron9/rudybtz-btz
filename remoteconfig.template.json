@@ -1,0 +1,156 @@
+{
+  "version": "1",
+  "projectNumber": "759447585600",
+  "parameters": {
+    "enable_analytics": {
+      "defaultValue": {
+        "value": "true"
+      },
+      "description": "Enable Google Analytics tracking",
+      "valueType": "BOOLEAN"
+    },
+    "enable_storage": {
+      "defaultValue": {
+        "value": "true"
+      },
+      "description": "Enable Firebase Storage features",
+      "valueType": "BOOLEAN"
+    },
+    "maintenance_mode": {
+      "defaultValue": {
+        "value": "false"
+      },
+      "description": "Enable maintenance mode to show maintenance page",
+      "valueType": "BOOLEAN"
+    },
+    "max_upload_size_mb": {
+      "defaultValue": {
+        "value": "50"
+      },
+      "description": "Maximum file upload size in megabytes",
+      "valueType": "NUMBER"
+    },
+    "allowed_file_types": {
+      "defaultValue": {
+        "value": "image/jpeg,image/png,image/webp,audio/mpeg,audio/wav,audio/ogg"
+      },
+      "description": "Comma-separated list of allowed MIME types for uploads",
+      "valueType": "STRING"
+    },
+    "theme_primary_color": {
+      "defaultValue": {
+        "value": "#0066cc"
+      },
+      "description": "Primary theme color (hex)",
+      "valueType": "STRING"
+    },
+    "theme_secondary_color": {
+      "defaultValue": {
+        "value": "#4d94ff"
+      },
+      "description": "Secondary theme color (hex)",
+      "valueType": "STRING"
+    },
+    "theme_accent_color": {
+      "defaultValue": {
+        "value": "#ff6b35"
+      },
+      "description": "Accent theme color (hex)",
+      "valueType": "STRING"
+    },
+    "theme_background_color": {
+      "defaultValue": {
+        "value": "#ffffff"
+      },
+      "description": "Background theme color (hex)",
+      "valueType": "STRING"
+    },
+    "theme_text_color": {
+      "defaultValue": {
+        "value": "#1a1a1a"
+      },
+      "description": "Text theme color (hex)",
+      "valueType": "STRING"
+    },
+    "layout_sidebar_position": {
+      "defaultValue": {
+        "value": "left"
+      },
+      "description": "Position of sidebar: left, right, or hidden",
+      "valueType": "STRING"
+    },
+    "layout_header_style": {
+      "defaultValue": {
+        "value": "modern"
+      },
+      "description": "Header style: classic, modern, or minimal",
+      "valueType": "STRING"
+    },
+    "layout_footer_enabled": {
+      "defaultValue": {
+        "value": "true"
+      },
+      "description": "Show footer on all pages",
+      "valueType": "BOOLEAN"
+    },
+    "app_title": {
+      "defaultValue": {
+        "value": "RUDYBTZ Portfolio"
+      },
+      "description": "Application title shown in browser tab",
+      "valueType": "STRING"
+    },
+    "app_description": {
+      "defaultValue": {
+        "value": "Digital portfolio showcasing music, art, and creative projects"
+      },
+      "description": "Application description for SEO",
+      "valueType": "STRING"
+    },
+    "contact_email": {
+      "defaultValue": {
+        "value": "contact@rudybtz.com"
+      },
+      "description": "Contact email address",
+      "valueType": "STRING"
+    },
+    "social_links": {
+      "defaultValue": {
+        "value": "{\"twitter\":\"\",\"instagram\":\"\",\"youtube\":\"\",\"spotify\":\"\",\"soundcloud\":\"\"}"
+      },
+      "description": "JSON object with social media links",
+      "valueType": "JSON"
+    },
+    "audio_player_enabled": {
+      "defaultValue": {
+        "value": "true"
+      },
+      "description": "Enable audio player functionality",
+      "valueType": "BOOLEAN"
+    },
+    "visualizer_enabled": {
+      "defaultValue": {
+        "value": "true"
+      },
+      "description": "Enable audio visualizer",
+      "valueType": "BOOLEAN"
+    },
+    "auto_play_enabled": {
+      "defaultValue": {
+        "value": "false"
+      },
+      "description": "Enable auto-play for audio tracks",
+      "valueType": "BOOLEAN"
+    },
+    "cache_duration_hours": {
+      "defaultValue": {
+        "value": "24"
+      },
+      "description": "Cache duration for remote config in hours",
+      "valueType": "NUMBER"
+    }
+  },
+  "parameterGroups": {},
+  "conditions": [],
+  "etag": "1-0-0"
+}

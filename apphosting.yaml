@@ -4,4 +4,15 @@
 runConfig:
   # Increase this value if you'd like to automatically spin up
   # more instances in response to increased traffic.
-  maxInstances: 1
+  maxInstances: 3
+  # Minimum instances to keep warm
+  minInstances: 0
+  # Configure CPU and memory
+  cpu: 1
+  memoryMiB: 1024
+  # Environment variables for production
+  env:
+    - variable: NODE_ENV
+      value: production
+    - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+      value: rudybtz-portfolio
