@@ -8,7 +8,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { AlbumUploadForm, type AlbumFormData } from '@/components/forms';
 import { Plus, Edit, Trash2, Music } from 'lucide-react';
 import { albumsService, tracksService } from '@/lib/services';
-import type { Album, Track } from '@/lib/types';
+import type { Album } from '@/lib/types';
+import type { UploadResult } from '@/lib/file-upload-service';
 
 export default function AlbumsTab() {
   const [albums, setAlbums] = useState<Album[]>([]);
@@ -42,7 +43,7 @@ export default function AlbumsTab() {
     }
   };
 
-  const handleSaveAlbum = async (albumData: any) => {
+  const handleSaveAlbum = async (albumData: AlbumFormData) => {
     try {
       if (selectedAlbum) {
         // Update existing album
@@ -53,7 +54,7 @@ export default function AlbumsTab() {
           genre: albumData.genre,
           mood: albumData.mood || '',
           coverArtUrl: albumData.coverArt?.downloadURL || '',
-          trackIds: albumData.tracks.map((track: any, index: number) => `${selectedAlbum.id}_track_${index}`)
+          trackIds: albumData.tracks.map((track: UploadResult, index: number) => `${selectedAlbum.id}_track_${index}`)
         });
       } else {
         // Create new album
@@ -64,7 +65,7 @@ export default function AlbumsTab() {
           genre: albumData.genre,
           mood: albumData.mood || '',
           coverArtUrl: albumData.coverArt?.downloadURL || '',
-          trackIds: albumData.tracks.map((track: any, index: number) => `new_album_track_${index}`)
+          trackIds: albumData.tracks.map((track: UploadResult, index: number) => `new_album_track_${index}`)
         });
 
         // Create tracks for the new album
@@ -94,7 +95,8 @@ export default function AlbumsTab() {
 
   const handleEdit = async (album: Album) => {
     setSelectedAlbum(album);
-    const tracks = await loadTracks(album.id);
+    // Load tracks for the album (currently not used in edit mode)
+    await loadTracks(album.id);
     setIsDialogOpen(true);
   };
 

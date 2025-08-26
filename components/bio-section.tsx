@@ -41,7 +41,7 @@ const milestones = [
   {
     year: '2021',
     title: 'Breakthrough Year',
-    description: 'Featured on Spotify\'s Electronic Rising playlist'
+    description: 'Featured on Spotify&apos;s Electronic Rising playlist'
   },
   {
     year: '2022',
@@ -206,11 +206,11 @@ export default function BioSection() {
         {/* Call to Action */}
         <div className="text-center mt-16 pt-16 border-t border-border/20">
           <h3 className="text-2xl font-bold font-headline text-metallic mb-4">
-            Let's Create Something Amazing
+            Let&apos;s Create Something Amazing
           </h3>
           <p className="text-foreground/70 mb-8 max-w-2xl mx-auto">
             Interested in collaborations, bookings, or just want to connect? 
-            Reach out and let's explore the possibilities of sound together.
+            Reach out and let&apos;s explore the possibilities of sound together.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="glassmorphism bg-accent/20 hover:bg-accent/30 border border-accent/30">

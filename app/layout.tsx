@@ -1,18 +1,10 @@
 import type { Metadata } from 'next';
-import { Inter, Orbitron } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/components/auth';
 import { PerformanceMonitor } from '@/components/performance';
 
-const inter = Inter({ 
-  subsets: ['latin'],
-  variable: '--font-inter'
-});
-
-const orbitron = Orbitron({ 
-  subsets: ['latin'],
-  variable: '--font-orbitron'
-});
+// Use system fonts for offline compatibility
+const fontVariables = 'font-inter font-orbitron';
 
 export const metadata: Metadata = {
   title: 'RUDYBTZ Portfolio - AI-Powered Music Experience',
@@ -39,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${orbitron.variable}`}>
+    <html lang="en" className={fontVariables}>
       <body
         className={`${inter.className} antialiased`}
       >
