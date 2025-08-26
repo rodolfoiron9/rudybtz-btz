@@ -9,9 +9,9 @@
   --text-color: #ffffff;
   --accent-color: #7F00FF;
   
-  /* Font families */
-  --font-headline: 'Orbitron', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  /* Font families - using system fonts for offline compatibility */
+  --font-headline: 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif';
+  --font-body: 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif';
   
   /* Spacing */
   --spacing-xs: 0.25rem;

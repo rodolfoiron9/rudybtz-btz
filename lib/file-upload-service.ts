@@ -18,8 +18,8 @@ export interface FileUploadOptions {
 
 export interface FileValidation {
   maxSize?: number; // in bytes
-  allowedTypes?: string[];
-  allowedExtensions?: string[];
+  allowedTypes?: readonly string[];
+  allowedExtensions?: readonly string[];
 }
 
 export interface UploadResult {
@@ -329,9 +329,9 @@ export const formatFileSize = (bytes: number): string => {
 };
 
 export const getFileTypeCategory = (file: File): keyof typeof FILE_VALIDATIONS | 'unknown' => {
-  if (FILE_VALIDATIONS.audio.allowedTypes.includes(file.type)) return 'audio';
-  if (FILE_VALIDATIONS.image.allowedTypes.includes(file.type)) return 'image';
-  if (FILE_VALIDATIONS.video.allowedTypes.includes(file.type)) return 'video';
-  if (FILE_VALIDATIONS.document.allowedTypes.includes(file.type)) return 'document';
+  if ((FILE_VALIDATIONS.audio.allowedTypes as readonly string[]).includes(file.type)) return 'audio';
+  if ((FILE_VALIDATIONS.image.allowedTypes as readonly string[]).includes(file.type)) return 'image';
+  if ((FILE_VALIDATIONS.video.allowedTypes as readonly string[]).includes(file.type)) return 'video';
+  if ((FILE_VALIDATIONS.document.allowedTypes as readonly string[]).includes(file.type)) return 'document';
   return 'unknown';
 };
