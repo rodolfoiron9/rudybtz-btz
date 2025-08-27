@@ -71,13 +71,14 @@ export default function AlbumsTab() {
         for (let i = 0; i < albumData.tracks.length; i++) {
           const track = albumData.tracks[i];
           await tracksService.create({
-            id: `${newAlbum.id}_track_${i}`,
             title: track.fileName.replace(/\.[^/.]+$/, ""), // Remove extension
-            albumId: newAlbum.id,
+            albumId: newAlbum,
             audioUrl: track.downloadURL,
             duration: 180, // Default duration, should be calculated from actual file
-            trackNumber: i + 1,
-            waveformData: []
+            visualizationSettings: {
+              presetId: 'default',
+              lyricsDisplay: 'none'
+            }
           });
         }
       }
@@ -160,12 +161,14 @@ export default function AlbumsTab() {
                 releaseDate: selectedAlbum.releaseDate?.toISOString().split('T')[0] || '',
                 genre: selectedAlbum.genre,
                 price: '9.99', // Default price, should be added to Album type
-                coverArt: selectedAlbum.coverArtUrl ? {
-                  downloadURL: selectedAlbum.coverArtUrl,
-                  fileName: 'cover.jpg',
-                  size: 0,
-                  contentType: 'image/jpeg'
-                } : undefined,
+                ...(selectedAlbum.coverArtUrl ? {
+                  coverArt: {
+                    downloadURL: selectedAlbum.coverArtUrl,
+                    fileName: 'cover.jpg',
+                    size: 0,
+                    contentType: 'image/jpeg'
+                  }
+                } : {}),
                 tracks: [] // Will be loaded and populated separately
               } : undefined}
               isEditing={!!selectedAlbum}
