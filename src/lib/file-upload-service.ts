@@ -7,7 +7,7 @@ import {
   getMetadata,
   StorageReference
 } from 'firebase/storage';
-import { storage } from './firebase';
+import { storage } from '../../lib/firebase';
 
 // File upload types
 export interface FileUploadOptions {
@@ -18,8 +18,8 @@ export interface FileUploadOptions {
 
 export interface FileValidation {
   maxSize?: number; // in bytes
-  allowedTypes?: string[];
-  allowedExtensions?: string[];
+  allowedTypes?: readonly string[];
+  allowedExtensions?: readonly string[];
 }
 
 export interface UploadResult {
@@ -78,7 +78,7 @@ class FileUploadService {
     }
 
     // Check file type
-    if (validation.allowedTypes && !validation.allowedTypes.includes(file.type)) {
+    if (validation.allowedTypes && !(validation.allowedTypes as unknown as string[]).includes(file.type)) {
       throw new Error(`File type ${file.type} is not allowed. Allowed types: ${validation.allowedTypes.join(', ')}`);
     }
 
@@ -329,9 +329,9 @@ export const formatFileSize = (bytes: number): string => {
 };
 
 export const getFileTypeCategory = (file: File): keyof typeof FILE_VALIDATIONS | 'unknown' => {
-  if (FILE_VALIDATIONS.audio.allowedTypes.includes(file.type)) return 'audio';
-  if (FILE_VALIDATIONS.image.allowedTypes.includes(file.type)) return 'image';
-  if (FILE_VALIDATIONS.video.allowedTypes.includes(file.type)) return 'video';
-  if (FILE_VALIDATIONS.document.allowedTypes.includes(file.type)) return 'document';
+  if ((FILE_VALIDATIONS.audio.allowedTypes as unknown as string[]).includes(file.type)) return 'audio';
+  if ((FILE_VALIDATIONS.image.allowedTypes as unknown as string[]).includes(file.type)) return 'image';
+  if ((FILE_VALIDATIONS.video.allowedTypes as unknown as string[]).includes(file.type)) return 'video';
+  if ((FILE_VALIDATIONS.document.allowedTypes as unknown as string[]).includes(file.type)) return 'document';
   return 'unknown';
 };

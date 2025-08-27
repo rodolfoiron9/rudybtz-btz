@@ -145,7 +145,7 @@ export function FileUpload({
             }));
             onUploadError?.(error);
           },
-          validation
+          ...(validation && { validation })
         }
       );
 

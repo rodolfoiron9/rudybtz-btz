@@ -33,7 +33,7 @@ interface AlbumFormData {
 interface AlbumUploadFormProps {
   onSave?: (album: AlbumFormData) => void;
   onCancel?: () => void;
-  initialData?: Partial<AlbumFormData>;
+  initialData?: Partial<AlbumFormData> | undefined;
   isEditing?: boolean;
 }
 
@@ -49,7 +49,7 @@ export function AlbumUploadForm({
     releaseDate: initialData?.releaseDate || '',
     genre: initialData?.genre || '',
     price: initialData?.price || '',
-    coverArt: initialData?.coverArt,
+    ...(initialData?.coverArt && { coverArt: initialData.coverArt }),
     tracks: initialData?.tracks || []
   });
 
@@ -67,7 +67,10 @@ export function AlbumUploadForm({
 
   const handleCoverUpload = (results: UploadResult[]) => {
     if (results.length > 0) {
-      setFormData(prev => ({ ...prev, coverArt: results[0] }));
+      const firstResult = results[0];
+      if (firstResult) {
+        setFormData(prev => ({ ...prev, coverArt: firstResult }));
+      }
     }
   };
 
@@ -86,7 +89,10 @@ export function AlbumUploadForm({
   };
 
   const removeCoverArt = () => {
-    setFormData(prev => ({ ...prev, coverArt: undefined }));
+    setFormData(prev => {
+      const { coverArt, ...rest } = prev;
+      return rest;
+    });
   };
 
   const validateForm = (): boolean => {
