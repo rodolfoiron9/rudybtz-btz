@@ -19,7 +19,7 @@ import {
   formatFileSize,
   getFileTypeCategory,
   FILE_VALIDATIONS
-} from '@/lib/file-upload-service';
+} from '@/src/lib/file-upload-service';
 
 interface FileUploadProps {
   path: string;
@@ -145,7 +145,7 @@ export function FileUpload({
             }));
             onUploadError?.(error);
           },
-          validation
+          ...(validation && { validation })
         }
       );
 

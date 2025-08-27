@@ -4,6 +4,8 @@ export interface Track {
   duration: number; // seconds
   audioUrl: string;
   albumId: string;
+  trackNumber: number;
+  waveformData?: number[];
   lyrics?: LyricsData;
   visualizationSettings: {
     presetId: string;

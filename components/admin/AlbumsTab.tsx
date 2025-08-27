@@ -57,7 +57,7 @@ export default function AlbumsTab() {
         });
       } else {
         // Create new album
-        const newAlbum = await albumsService.create({
+        const newAlbumId = await albumsService.create({
           title: albumData.title,
           description: albumData.description,
           releaseDate: new Date(albumData.releaseDate),
@@ -71,13 +71,16 @@ export default function AlbumsTab() {
         for (let i = 0; i < albumData.tracks.length; i++) {
           const track = albumData.tracks[i];
           await tracksService.create({
-            id: `${newAlbum.id}_track_${i}`,
             title: track.fileName.replace(/\.[^/.]+$/, ""), // Remove extension
-            albumId: newAlbum.id,
+            albumId: newAlbumId,
             audioUrl: track.downloadURL,
             duration: 180, // Default duration, should be calculated from actual file
             trackNumber: i + 1,
-            waveformData: []
+            waveformData: [],
+            visualizationSettings: {
+              presetId: 'default',
+              lyricsDisplay: 'none'
+            }
           });
         }
       }

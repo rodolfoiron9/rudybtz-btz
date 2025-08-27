@@ -26,14 +26,14 @@ interface AlbumFormData {
   releaseDate: string;
   genre: string;
   price: string;
-  coverArt?: UploadResult;
+  coverArt?: UploadResult | undefined;
   tracks: UploadResult[];
 }
 
 interface AlbumUploadFormProps {
   onSave?: (album: AlbumFormData) => void;
   onCancel?: () => void;
-  initialData?: Partial<AlbumFormData>;
+  initialData?: Partial<AlbumFormData> | undefined;
   isEditing?: boolean;
 }
 
