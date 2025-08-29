@@ -144,9 +144,10 @@ export default function HeroTab() {
               </div>
 
               <div>
-                <Label className="text-white">Media Source</Label>
+                <Label htmlFor="mediaUrl" className="text-white">Media Source</Label>
                 <div className="flex space-x-2 mt-2">
                   <Input
+                    id="mediaUrl"
                     value={formData.mediaUrl}
                     onChange={(e) => setFormData({...formData, mediaUrl: e.target.value})}
                     className="bg-gray-700 border-gray-600 text-white"
@@ -225,10 +226,10 @@ export default function HeroTab() {
                   {slide.type === 'video' ? 'Video Slide' : 'Image Slide'}
                 </span>
                 <div className="flex space-x-2">
-                  <Button size="sm" variant="outline" className="border-gray-600">
+                  <Button size="sm" variant="outline" className="border-gray-600" aria-label="Edit slide">
                     <Edit className="w-4 h-4" />
                   </Button>
-                  <Button size="sm" variant="outline" className="border-red-600 text-red-400">
+                  <Button size="sm" variant="outline" className="border-red-600 text-red-400" aria-label="Delete slide">
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>

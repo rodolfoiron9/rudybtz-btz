@@ -43,7 +43,9 @@
 
 @layer components {
   .glass-effect {
-    @apply backdrop-blur-md bg-white/10 border border-white/20;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    @apply bg-white/10 border border-white/20;
   }
   
   .neon-glow {
