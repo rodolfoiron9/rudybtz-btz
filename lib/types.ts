@@ -63,11 +63,23 @@ export interface LyricsData {
 
 export interface HeroSlide {
   id: string;
-  mediaUrl: string;
-  type: 'image' | 'video';
   title: string;
-  description?: string;
+  subtitle: string;
+  description: string;
+  type: 'image' | 'video';
+  mediaUrl: string;
+  overlayOpacity: number;
+  textPosition: 'left' | 'center' | 'right';
+  animation: 'fade' | 'slide' | 'zoom' | 'parallax';
+  duration: number;
+  isActive: boolean;
   order: number;
+  callToAction?: {
+    text: string;
+    url: string;
+    style: 'primary' | 'secondary' | 'outline';
+  };
+  customCSS?: string;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -3,15 +3,22 @@
 @tailwind utilities;
 
 :root {
-  --primary-color: #7F00FF;
-  --secondary-color: #00FFFF;
-  --background-color: #99A3A4;
-  --text-color: #ffffff;
-  --accent-color: #7F00FF;
+  /* User's preferred dark theme from mobile app */
+  --primary-color: #00d4ff;      /* Cyan accent */
+  --secondary-color: #00ff88;    /* Success green */
+  --background-color: #0f0f0f;   /* Deep black */
+  --card-color: #1a1a1a;        /* Dark card background */
+  --text-color: #ffffff;         /* White text */
+  --muted-color: #aaa;           /* Muted text */
+  --border-color: #333;          /* Border color */
+  --accent-color: #00d4ff;       /* Primary cyan */
+  --warning-color: #ffa726;      /* Orange warning */
+  --error-color: #ff4757;        /* Red error */
+  --success-color: #00ff88;      /* Green success */
   
   /* Font families */
-  --font-headline: 'Orbitron', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-headline: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -30,20 +37,34 @@
   }
   
   body {
-    @apply bg-gray-900 text-white;
     background-color: var(--background-color);
     color: var(--text-color);
     font-family: var(--font-body);
+    font-weight: 400;
   }
   
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-headline);
+    font-weight: 600;
   }
 }
 
 @layer components {
+  /* User's preferred mobile app styles */
+  .cyber-card {
+    background: rgba(255, 255, 255, 0.05);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: var(--border-radius);
+  }
+  
+  .cyber-gradient {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #0099cc 100%);
+  }
+  
   .glass-effect {
-    @apply backdrop-blur-md bg-white/10 border border-white/20;
+    @apply backdrop-blur-md bg-white/5 border border-white/20;
   }
   
   .neon-glow {
@@ -51,13 +72,176 @@
   }
   
   .neon-text {
-    color: var(--secondary-color);
-    text-shadow: 0 0 10px var(--secondary-color);
+    color: var(--primary-color);
+    text-shadow: 0 0 10px var(--primary-color);
+  }
+  
+  .cyber-button {
+    background: var(--primary-color);
+    color: #000;
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+  }
+  
+  .cyber-button:hover {
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  .dark-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: var(--border-radius);
+  }
+  
+  .dark-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+  }
+  
+  .status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .status-active {
+    background: var(--success-color);
+    color: #000;
+  }
+  
+  .status-warning {
+    background: var(--warning-color);
+    color: #000;
+  }
+  
+  .status-error {
+    background: var(--error-color);
+    color: #fff;
+  }
+  
+  .priority-critical {
+    border-left: 4px solid var(--error-color);
+  }
+  
+  .priority-high {
+    border-left: 4px solid var(--warning-color);
+  }
+  
+  .priority-medium {
+    border-left: 4px solid #42a5f5;
+  }
+  
+  .priority-low {
+    border-left: 4px solid #66bb6a;
   }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  @supports (text-wrap: balance) {
+    .text-balance {
+      text-wrap: balance;
+    }
   }
+}
+
+/* Animation utilities matching mobile app */
+/* Clean 3D Silver Metallic White Violet Gradient Effects */
+.text-3d-silver-violet {
+  background: linear-gradient(135deg, 
+    #c0c0c0 0%, 
+    #ffffff 25%, 
+    #e6e6fa 50%, 
+    #dda0dd 75%, 
+    #ffffff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 
+    1px 1px 2px rgba(192, 192, 192, 0.8),
+    2px 2px 4px rgba(221, 160, 221, 0.6),
+    3px 3px 6px rgba(0, 0, 0, 0.3);
+  filter: drop-shadow(0 2px 4px rgba(192, 192, 192, 0.4));
+}
+
+.nav-3d-silver-violet {
+  background: linear-gradient(135deg,
+    #c0c0c0 0%,
+    #ffffff 30%,
+    #e6e6fa 70%,
+    #dda0dd 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 
+    1px 1px 2px rgba(192, 192, 192, 0.6),
+    2px 2px 3px rgba(221, 160, 221, 0.4);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.nav-3d-silver-violet:hover {
+  filter: drop-shadow(0 2px 6px rgba(221, 160, 221, 0.5));
+  transform: translateY(-1px);
+}
+
+.logo-3d-silver-violet {
+  background: linear-gradient(45deg,
+    #c0c0c0 0%,
+    #ffffff 20%,
+    #e6e6fa 40%,
+    #dda0dd 60%,
+    #ffffff 80%,
+    #c0c0c0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 
+    2px 2px 4px rgba(192, 192, 192, 0.8),
+    3px 3px 6px rgba(221, 160, 221, 0.6);
+  filter: drop-shadow(0 3px 6px rgba(192, 192, 192, 0.5));
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+/* Heading Styles */
+h1.silver-violet {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+h2.silver-violet {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.75rem;
+}
+
+/* Link Styles */
+a.silver-violet-link {
+  text-decoration: none;
+  display: inline-block;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+a.silver-violet-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #dda0dd, #e6e6fa);
+  transition: width 0.3s ease;
+  box-shadow: 0 0 4px rgba(221, 160, 221, 0.5);
+}
+
+a.silver-violet-link:hover::after {
+  width: 100%;
 }

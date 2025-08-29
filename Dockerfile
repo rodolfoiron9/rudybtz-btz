@@ -3,6 +3,7 @@
 
 # Stage 1: Dependencies
 FROM node:18-alpine AS deps
+RUN apk update && apk upgrade
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 

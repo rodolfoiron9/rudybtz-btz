@@ -4,7 +4,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center space-y-8">
-        <h1 className="text-6xl font-bold neon-text">
+        <h1 className="text-3d-silver-violet silver-violet text-6xl font-bold">
           RUDYBTZ
         </h1>
         <p className="text-xl text-gray-300">
@@ -13,13 +13,13 @@ export default function HomePage() {
         <div className="space-x-4">
           <Link 
             href="/portfolio" 
-            className="inline-block px-6 py-3 bg-violet-600 hover:bg-violet-700 rounded-lg font-semibold transition-colors"
+            className="silver-violet-link nav-3d-silver-violet inline-block px-6 py-3 bg-violet-600 hover:bg-violet-700 rounded-lg font-semibold transition-colors"
           >
             View Portfolio
           </Link>
           <Link 
             href="/admin" 
-            className="inline-block px-6 py-3 border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black rounded-lg font-semibold transition-colors"
+            className="silver-violet-link nav-3d-silver-violet inline-block px-6 py-3 border border-violet-400 text-violet-400 hover:bg-violet-400 hover:text-black rounded-lg font-semibold transition-colors"
           >
             Admin Dashboard
           </Link>

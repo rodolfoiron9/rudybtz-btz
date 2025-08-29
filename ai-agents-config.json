@@ -1,0 +1,79 @@
+{
+  "agents": {
+    "github-copilot": {
+      "name": "GitHub Copilot",
+      "status": "ready",
+      "capabilities": [
+        "Feature development",
+        "TypeScript architecture",
+        "Code integration",
+        "Project management"
+      ],
+      "priority_tasks": [
+        "Audio Analysis Engine",
+        "Admin Authentication",
+        "TypeScript optimization",
+        "Git coordination"
+      ],
+      "max_concurrent_tasks": 2,
+      "communication_method": "vscode_chat"
+    },
+    "gemini-cli": {
+      "name": "Gemini CLI",
+      "status": "ready",
+      "capabilities": [
+        "Testing implementation",
+        "Documentation writing",
+        "Code review",
+        "Accessibility"
+      ],
+      "priority_tasks": [
+        "Unit testing",
+        "Integration testing",
+        "E2E testing",
+        "Documentation updates"
+      ],
+      "max_concurrent_tasks": 3,
+      "communication_method": "instruction_files"
+    },
+    "qwen-cli": {
+      "name": "Qwen CLI",
+      "status": "ready", 
+      "capabilities": [
+        "Performance optimization",
+        "Bundle analysis",
+        "Security auditing",
+        "Production deployment"
+      ],
+      "priority_tasks": [
+        "Bundle size optimization",
+        "Performance monitoring",
+        "Security audit",
+        "Deployment setup"
+      ],
+      "max_concurrent_tasks": 2,
+      "communication_method": "instruction_files"
+    }
+  },
+  "coordination_settings": {
+    "task_assignment_strategy": "priority_based",
+    "max_active_tasks_per_agent": 2,
+    "task_timeout_hours": 24,
+    "progress_check_interval_minutes": 30,
+    "auto_reassign_stalled_tasks": true,
+    "enable_cross_agent_dependencies": true
+  },
+  "notification_settings": {
+    "log_level": "INFO",
+    "send_progress_reports": true,
+    "report_frequency_hours": 4,
+    "alert_on_task_completion": true,
+    "alert_on_agent_errors": true
+  },
+  "file_paths": {
+    "task_queue": "ai-task-queue.json",
+    "progress_log": "ai-progress.log",
+    "status_report": "ai-team-status.md",
+    "instruction_template": "instructions_{agent}.md"
+  }
+}

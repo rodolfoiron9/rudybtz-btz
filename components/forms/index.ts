@@ -1,1 +1,0 @@
-export { AlbumUploadForm } from './album-upload-form';

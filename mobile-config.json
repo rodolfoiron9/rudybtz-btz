@@ -1,0 +1,118 @@
+{
+  "mobile_integration": {
+    "push_notifications": {
+      "service": "firebase_cloud_messaging",
+      "config": {
+        "project_id": "rudy-albums-ai-coordinator",
+        "sender_id": "your-sender-id",
+        "api_key": "your-firebase-api-key"
+      },
+      "notification_types": {
+        "task_assignment": {
+          "icon": "🤖",
+          "sound": "default",
+          "priority": "high"
+        },
+        "approval_request": {
+          "icon": "⚠️",
+          "sound": "urgent",
+          "priority": "max"
+        },
+        "deployment": {
+          "icon": "🚀",
+          "sound": "deployment",
+          "priority": "high"
+        },
+        "critical_error": {
+          "icon": "🚨",
+          "sound": "critical",
+          "priority": "max"
+        }
+      }
+    },
+    "authentication": {
+      "method": "jwt",
+      "expiry_hours": 24,
+      "refresh_enabled": true,
+      "biometric_auth": true
+    },
+    "workflow_presets": {
+      "quick_actions": [
+        {
+          "name": "Emergency Hotfix",
+          "description": "Deploy critical security fix",
+          "requires_approval": true,
+          "auto_execute": false,
+          "steps": ["security-patch", "emergency-test", "immediate-deploy"]
+        },
+        {
+          "name": "Performance Sprint",
+          "description": "Full performance optimization cycle",
+          "requires_approval": false,
+          "auto_execute": true,
+          "steps": ["bundle-analysis", "optimization", "performance-test"]
+        },
+        {
+          "name": "Feature Development",
+          "description": "Standard feature development workflow",
+          "requires_approval": true,
+          "auto_execute": false,
+          "steps": ["feature-implement", "testing", "review", "deploy"]
+        }
+      ]
+    },
+    "approval_rules": {
+      "auto_approve": {
+        "performance_optimization": true,
+        "testing": true,
+        "documentation": true
+      },
+      "manual_approve": {
+        "deployment": true,
+        "security_changes": true,
+        "critical_features": true,
+        "database_changes": true
+      },
+      "timeout_minutes": {
+        "low": 1440,
+        "medium": 240,
+        "high": 60,
+        "critical": 15
+      }
+    },
+    "mobile_ui": {
+      "theme": "dark",
+      "accent_color": "#00d4ff",
+      "animations": true,
+      "haptic_feedback": true,
+      "offline_mode": true
+    }
+  },
+  "api_endpoints": {
+    "base_url": "http://localhost:5001",
+    "endpoints": {
+      "auth": "/api/auth/login",
+      "approval_requests": "/api/approval-requests",
+      "workflow_presets": "/api/workflow-presets",
+      "agent_status": "/api/agents/status",
+      "create_task": "/api/agents/{agent_id}/task"
+    }
+  },
+  "security": {
+    "rate_limiting": {
+      "requests_per_minute": 100,
+      "burst_limit": 10
+    },
+    "encryption": {
+      "data_at_rest": true,
+      "data_in_transit": true,
+      "algorithm": "AES-256"
+    },
+    "audit_logging": {
+      "enabled": true,
+      "log_approvals": true,
+      "log_rejections": true,
+      "log_workflows": true
+    }
+  }
+}

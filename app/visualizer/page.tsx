@@ -1,99 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import dynamic from 'next/dynamic';
+import { AudioPlayer } from '@/components/audio-analysis';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Music, Play, Settings } from 'lucide-react';
-
-// Dynamic import to avoid SSR issues with 3D components
-const VisualizerPlayer = dynamic(
-  () => import('@/components/visualizer').then(mod => mod.VisualizerPlayer),
-  { 
-    ssr: false,
-    loading: () => (
-      <div className="w-full h-80 bg-black rounded-lg flex items-center justify-center">
-        <div className="text-white/60 text-center">
-          <Music className="w-8 h-8 mx-auto mb-2 animate-pulse" />
-          <p>Loading 3D Visualizer...</p>
-        </div>
-      </div>
-    )
-  }
-);
-
-const presets = {
-  electronic: {
-    name: 'Electronic',
-    type: 'cubes' as const,
-    gridSize: 10,
-    colorScheme: {
-      primary: '#8B5CF6',
-      secondary: '#06B6D4',
-      accent: '#F59E0B'
-    },
-    effects: {
-      rotation: true,
-      scaling: true,
-      pulsing: true,
-      particles: false
-    },
-    sensitivity: {
-      bass: 1.5,
-      mid: 1.0,
-      treble: 0.8
-    }
-  },
-  
-  ambient: {
-    name: 'Ambient',
-    type: 'spheres' as const,
-    gridSize: 6,
-    colorScheme: {
-      primary: '#10B981',
-      secondary: '#3B82F6',
-      accent: '#8B5CF6'
-    },
-    effects: {
-      rotation: true,
-      scaling: false,
-      pulsing: true,
-      particles: true
-    },
-    sensitivity: {
-      bass: 0.8,
-      mid: 1.2,
-      treble: 1.0
-    }
-  }
-};
-
-interface VisualizerPreset {
-  name: string;
-  type: 'cubes' | 'spheres' | 'waves' | 'particles';
-  gridSize: number;
-  colorScheme: {
-    primary: string;
-    secondary: string;
-    accent: string;
-  };
-  effects: {
-    rotation: boolean;
-    scaling: boolean;
-    pulsing: boolean;
-    particles: boolean;
-  };
-  sensitivity: {
-    bass: number;
-    mid: number;
-    treble: number;
-  };
-}
+import { Music, Play, BarChart3, Radio } from 'lucide-react';
+import Link from 'next/link';
 
 export default function VisualizerDemo() {
-  const [selectedPreset, setSelectedPreset] = useState<VisualizerPreset>(presets.electronic);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 p-6">
       <div className="max-w-6xl mx-auto space-y-8">
@@ -104,140 +17,158 @@ export default function VisualizerDemo() {
               <Music className="w-6 h-6 text-purple-400" />
             </div>
             <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              3D Audio Visualizer
+              Audio Visualizer Studio
             </h1>
           </div>
           
           <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            Experience your music in three dimensions with real-time audio analysis and stunning visual effects.
+            Experience your music with real-time audio analysis, waveform visualization, and spectrum analysis.
           </p>
           
           <div className="flex items-center justify-center gap-2">
             <Badge variant="secondary" className="bg-purple-500/10 text-purple-400">
               <Play className="w-3 h-3 mr-1" />
-              Interactive
+              Real-time
             </Badge>
             <Badge variant="secondary" className="bg-blue-500/10 text-blue-400">
               Web Audio API
             </Badge>
             <Badge variant="secondary" className="bg-violet-500/10 text-violet-400">
-              React Three Fiber
+              Canvas Based
             </Badge>
+          </div>
+          
+          <div className="pt-4">
+            <Link href="/portfolio" className="text-cyan-400 hover:text-cyan-300 transition-colors">
+              ← Back to Portfolio
+            </Link>
           </div>
         </div>
 
-        {/* Main Visualizer */}
+        {/* Main Audio Player */}
         <Card className="overflow-hidden bg-black/50 border-purple-500/30">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
-              <Settings className="w-5 h-5" />
-              Live Visualizer Demo
+              <Radio className="w-5 h-5" />
+              Audio Analysis Engine
             </CardTitle>
             <CardDescription className="text-gray-300">
-              Click play to start the 3D audio visualization. Use mouse to orbit around the 3D scene.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="w-full h-80 bg-black rounded-lg flex items-center justify-center">
-              <div className="text-white/60 text-center">
-                <Music className="w-8 h-8 mx-auto mb-2 animate-pulse" />
-                <p>3D Visualizer Component Loading...</p>
-                <p className="text-sm mt-2 text-gray-400">WebGL + Audio API Integration</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Preset Selection */}
-        <Card className="bg-black/50 border-purple-500/30">
-          <CardHeader>
-            <CardTitle className="text-white">Visualizer Presets</CardTitle>
-            <CardDescription className="text-gray-300">
-              Choose different visual styles optimized for various music genres
+              Upload your audio files and watch the real-time visualization unfold with waveform, spectrum, and circular visualizers.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {Object.entries(presets).map(([key, preset]) => (
-                <div
-                  key={key}
-                  className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${
-                    selectedPreset.name === preset.name
-                      ? 'border-purple-500 bg-purple-500/10'
-                      : 'border-gray-600 hover:border-purple-400 hover:bg-purple-500/5'
-                  }`}
-                  onClick={() => setSelectedPreset(preset)}
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-semibold text-white">{preset.name}</h3>
-                      <Badge variant="outline" className="text-xs text-gray-300">
-                        {preset.type}
-                      </Badge>
-                    </div>
-                    
-                    {/* Color Preview */}
-                    <div className="flex gap-2">
-                      <div 
-                        className="w-4 h-4 rounded-full border"
-                        style={{ backgroundColor: preset.colorScheme.primary }}
-                      />
-                      <div 
-                        className="w-4 h-4 rounded-full border"
-                        style={{ backgroundColor: preset.colorScheme.secondary }}
-                      />
-                      <div 
-                        className="w-4 h-4 rounded-full border"
-                        style={{ backgroundColor: preset.colorScheme.accent }}
-                      />
-                    </div>
-                    
-                    {/* Effects */}
-                    <div className="flex flex-wrap gap-1">
-                      {Object.entries(preset.effects)
-                        .filter(([_, enabled]) => enabled)
-                        .map(([effect]) => (
-                          <Badge key={effect} variant="secondary" className="text-xs bg-gray-700 text-gray-300">
-                            {effect}
-                          </Badge>
-                        ))}
-                    </div>
-                    
-                    {/* Grid Size */}
-                    <p className="text-xs text-gray-400">
-                      Grid: {preset.gridSize}×{preset.gridSize}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <AudioPlayer 
+              showVisualizers={true}
+              showControls={true}
+              autoPlay={false}
+              className="w-full"
+            />
           </CardContent>
         </Card>
 
-        {/* Features */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="bg-black/50 border-purple-500/30">
             <CardHeader>
-              <CardTitle className="text-lg text-white">Real-time Analysis</CardTitle>
+              <CardTitle className="text-lg text-white flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-purple-400" />
+                Waveform Analysis
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">
-                Advanced Web Audio API integration analyzes frequency bands, bass, mid, and treble in real-time for responsive visualizations.
+              <p className="text-sm text-gray-300 mb-4">
+                Interactive waveform visualization with seek functionality. Click anywhere on the waveform to jump to that position.
               </p>
+              <div className="space-y-2">
+                <div className="text-xs text-gray-400">Features:</div>
+                <ul className="text-xs text-gray-300 space-y-1">
+                  <li>• Real-time waveform generation</li>
+                  <li>• Progress tracking</li>
+                  <li>• Interactive seeking</li>
+                  <li>• Peak visualization</li>
+                </ul>
+              </div>
             </CardContent>
           </Card>
           
           <Card className="bg-black/50 border-purple-500/30">
             <CardHeader>
-              <CardTitle className="text-lg text-white">3D Graphics</CardTitle>
+              <CardTitle className="text-lg text-white flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-blue-400" />
+                Spectrum Analyzer
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-300">
-                Built with React Three Fiber and Three.js for smooth 3D rendering with orbit controls and dynamic lighting effects.
+              <p className="text-sm text-gray-300 mb-4">
+                Real-time frequency spectrum analysis with peak holds and frequency band visualization.
               </p>
+              <div className="space-y-2">
+                <div className="text-xs text-gray-400">Features:</div>
+                <ul className="text-xs text-gray-300 space-y-1">
+                  <li>• 64-band frequency analysis</li>
+                  <li>• Peak hold indicators</li>
+                  <li>• dB level mapping</li>
+                  <li>• Gradient coloring</li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-black/50 border-purple-500/30">
+            <CardHeader>
+              <CardTitle className="text-lg text-white flex items-center gap-2">
+                <Radio className="w-5 h-5 text-violet-400" />
+                Circular Visualizer
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-300 mb-4">
+                360-degree circular audio visualization with beat detection and BPM display.
+              </p>
+              <div className="space-y-2">
+                <div className="text-xs text-gray-400">Features:</div>
+                <ul className="text-xs text-gray-300 space-y-1">
+                  <li>• 128-bar circular spectrum</li>
+                  <li>• Beat detection & BPM</li>
+                  <li>• Reactive animations</li>
+                  <li>• Color-coded frequencies</li>
+                </ul>
+              </div>
             </CardContent>
           </Card>
         </div>
+
+        {/* Technical Info */}
+        <Card className="bg-black/50 border-purple-500/30">
+          <CardHeader>
+            <CardTitle className="text-white">Technical Implementation</CardTitle>
+            <CardDescription className="text-gray-300">
+              Built with cutting-edge web technologies for optimal performance
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <h4 className="font-semibold text-white">Audio Processing</h4>
+                <ul className="text-sm text-gray-300 space-y-1">
+                  <li>• Web Audio API for real-time analysis</li>
+                  <li>• FFT (Fast Fourier Transform) processing</li>
+                  <li>• Beat detection algorithms</li>
+                  <li>• Audio metadata extraction</li>
+                </ul>
+              </div>
+              <div className="space-y-3">
+                <h4 className="font-semibold text-white">Visualization</h4>
+                <ul className="text-sm text-gray-300 space-y-1">
+                  <li>• Canvas 2D for high-performance rendering</li>
+                  <li>• RequestAnimationFrame optimization</li>
+                  <li>• Responsive design with device pixel ratio</li>
+                  <li>• Hardware-accelerated graphics</li>
+                </ul>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

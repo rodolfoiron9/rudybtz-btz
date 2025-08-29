@@ -132,6 +132,9 @@ Copilot   → Main coordination + complex features
 ```markdown
 ## Progress Update from [AI Name]
 
+**Timestamp**: [Current date and time]
+**Overall Status**: [e.g., On Track, Blocked, Needs Review]
+
 **Completed**:
 - ✅ Task 1
 - ✅ Task 2

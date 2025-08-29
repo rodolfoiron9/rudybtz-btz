@@ -1,5 +1,14 @@
-import { LoginForm } from '@/components/auth';
+'use client';
+
+import { useRouter } from 'next/navigation';
+import { LoginForm } from '@/components/auth/login-form';
 
 export default function AdminLoginPage() {
-  return <LoginForm redirectTo="/admin" />;
+  const router = useRouter();
+
+  const handleLoginSuccess = () => {
+    router.push('/admin');
+  };
+
+  return <LoginForm onSuccess={handleLoginSuccess} />;
 }

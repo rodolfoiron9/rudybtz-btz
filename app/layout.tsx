@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter, Orbitron } from 'next/font/google';
 import './globals.css';
-import { AuthProvider } from '@/components/auth';
-import { PerformanceMonitor } from '@/components/performance';
+import Header from '../components/header';
+import { AuthProvider } from '@/components/hooks/use-auth';
+// import { PerformanceMonitor } from '@/components/performance';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -43,13 +44,16 @@ export default function RootLayout({
       <body
         className={`${inter.className} antialiased`}
       >
-        <AuthProvider>
-          <PerformanceMonitor
-            enableDeviceInfo={process.env.NODE_ENV === 'development'}
-            enableNetworkInfo={process.env.NODE_ENV === 'development'}
-          />
-          {children}
-        </AuthProvider>
+        <Header />
+        <main className="pt-16">
+          <AuthProvider>
+            {/* <PerformanceMonitor
+              enableDeviceInfo={process.env.NODE_ENV === 'development'}
+              enableNetworkInfo={process.env.NODE_ENV === 'development'}
+            /> */}
+            {children}
+          </AuthProvider>
+        </main>
       </body>
     </html>
   );
