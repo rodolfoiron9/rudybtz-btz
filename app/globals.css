@@ -9,9 +9,9 @@
   --text-color: #ffffff;
   --accent-color: #7F00FF;
   
-  /* Font families */
-  --font-headline: 'Orbitron', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  /* Font families - using system fonts */
+  --font-headline: var(--font-orbitron, "Courier New", Courier, monospace);
+  --font-body: var(--font-inter, ui-sans-serif, system-ui, sans-serif);
   
   /* Spacing */
   --spacing-xs: 0.25rem;
