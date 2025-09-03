@@ -1,18 +1,7 @@
 import type { Metadata } from 'next';
-import { Inter, Orbitron } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/components/auth';
 import { PerformanceMonitor } from '@/components/performance';
-
-const inter = Inter({ 
-  subsets: ['latin'],
-  variable: '--font-inter'
-});
-
-const orbitron = Orbitron({ 
-  subsets: ['latin'],
-  variable: '--font-orbitron'
-});
 
 export const metadata: Metadata = {
   title: 'RUDYBTZ Portfolio - AI-Powered Music Experience',
@@ -39,10 +28,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${orbitron.variable}`}>
-      <body
-        className={`${inter.className} antialiased`}
-      >
+    <html lang="en">
+      <head>
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            :root {
+              --font-inter: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+              --font-orbitron: "Courier New", Courier, monospace, ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas, "Liberation Mono";
+            }
+          `
+        }} />
+      </head>
+      <body className="antialiased">
         <AuthProvider>
           <PerformanceMonitor
             enableDeviceInfo={process.env.NODE_ENV === 'development'}
