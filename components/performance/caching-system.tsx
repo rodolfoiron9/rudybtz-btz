@@ -15,7 +15,7 @@ interface CacheOptions {
 }
 
 class MemoryCache {
-  private cache = new Map<string, CacheItem<any>>();
+  private cache = new Map<string, CacheItem<unknown>>();
   private maxSize: number;
   
   constructor(maxSize = 100) {

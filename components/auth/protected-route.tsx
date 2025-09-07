@@ -23,6 +23,17 @@ export default function ProtectedRoute({
   const [checking, setChecking] = useState(true);
   const router = useRouter();
 
+  const checkAdminStatus = async (): Promise<boolean> => {
+    // Check if user email matches admin emails
+    const adminEmails = [
+      'rudybtz@gmail.com',
+      'admin@rudybtz.com',
+      'rodolfo@rudybtz.com'
+    ];
+    
+    return adminEmails.includes(user?.email || '');
+  };
+
   useEffect(() => {
     const checkAuth = async () => {
       if (loading) return;
@@ -52,18 +63,7 @@ export default function ProtectedRoute({
     };
 
     checkAuth();
-  }, [user, loading, requireAdmin, router, fallbackPath]);
-
-  const checkAdminStatus = async (): Promise<boolean> => {
-    // Check if user email matches admin emails
-    const adminEmails = [
-      'rudybtz@gmail.com',
-      'admin@rudybtz.com',
-      // Add your admin emails here
-    ];
-
-    return adminEmails.includes(user?.email || '');
-  };
+  }, [user, loading, requireAdmin, router, fallbackPath, checkAdminStatus]);
 
   // Show loading state
   if (loading || checking) {
@@ -91,7 +91,7 @@ export default function ProtectedRoute({
             <AlertCircle className="w-8 h-8 text-destructive mb-4" />
             <h3 className="text-lg font-semibold mb-2">Access Denied</h3>
             <p className="text-sm text-muted-foreground text-center mb-4">
-              You don't have permission to access this area. Admin privileges are required.
+              You don&apos;t have permission to access this area. Admin privileges are required.
             </p>
             <div className="flex gap-2">
               <Button 
