@@ -116,7 +116,7 @@ export function createLazyComponent<P extends object>(
   return function LazyComponentWrapper(props: P) {
     return (
       <Suspense fallback={<FallbackComponent />}>
-        <LazyComponent {...(props as any)} />
+        <LazyComponent {...props} />
       </Suspense>
     );
   };
@@ -150,7 +150,7 @@ export function withLazyLoading<P extends object>(
   return function LazyLoadedComponent(props: P) {
     return (
       <Suspense fallback={<FallbackComponent />}>
-        <LazyWrappedComponent {...(props as any)} />
+        <LazyWrappedComponent {...props} />
       </Suspense>
     );
   };

@@ -116,7 +116,7 @@ export function generateSEOMetadata({
     openGraph: {
       title: fullTitle,
       description,
-      type: ogType as any,
+      type: ogType as 'website' | 'article' | 'profile' | 'book' | 'video.movie' | 'video.episode' | 'video.tv_show' | 'video.other' | 'music.song' | 'music.album' | 'music.playlist' | 'music.radio_station',
       url: canonicalUrl,
       images: ogImage ? [{ url: ogImage }] : undefined,
       siteName: siteTitle,

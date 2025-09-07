@@ -19,7 +19,7 @@ import {
   formatFileSize,
   getFileTypeCategory,
   FILE_VALIDATIONS
-} from '@/src/lib/file-upload-service';
+} from '@/lib/file-upload-service';
 
 interface FileUploadProps {
   path: string;
