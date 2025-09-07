@@ -17,8 +17,7 @@ import {
   Box, 
   BookOpen, 
   Database, 
-  Palette,
-  Brain
+  Palette
 } from 'lucide-react';
 
 export default function AdminDashboard() {

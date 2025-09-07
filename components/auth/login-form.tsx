@@ -46,7 +46,7 @@ export default function LoginForm({ redirectTo = '/admin' }: LoginFormProps) {
         await signUp(formData.email, formData.password);
       }
       router.push(redirectTo);
-    } catch (error) {
+    } catch (_error) {
       // Error is handled by the auth context
     } finally {
       setIsLoading(false);
@@ -58,7 +58,7 @@ export default function LoginForm({ redirectTo = '/admin' }: LoginFormProps) {
     try {
       await signInWithGoogle();
       router.push(redirectTo);
-    } catch (error) {
+    } catch (_error) {
       // Error is handled by the auth context
     } finally {
       setIsLoading(false);
@@ -74,7 +74,7 @@ export default function LoginForm({ redirectTo = '/admin' }: LoginFormProps) {
       await resetPassword(formData.email);
       setMode('signin');
       // Show success message
-    } catch (error) {
+    } catch (_error) {
       // Error is handled by the auth context
     } finally {
       setIsLoading(false);
@@ -233,7 +233,7 @@ export default function LoginForm({ redirectTo = '/admin' }: LoginFormProps) {
                   Forgot your password?
                 </Button>
                 <div className="text-sm text-muted-foreground">
-                  Don't have an account?{' '}
+                  Don&apos;t have an account?{' '}
                   <Button
                     type="button"
                     variant="link"

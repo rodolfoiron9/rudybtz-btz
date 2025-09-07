@@ -10,6 +10,23 @@ interface PerformanceMetrics {
   ttfb: number; // Time to First Byte
 }
 
+interface DeviceInfo {
+  userAgent: string;
+  platform: string;
+  language: string;
+  cookieEnabled: boolean;
+  onLine: boolean;
+  hardwareConcurrency: number;
+  maxTouchPoints: number;
+}
+
+interface NetworkInfo {
+  effectiveType?: string;
+  downlink?: number;
+  rtt?: number;
+  saveData?: boolean;
+}
+
 interface PerformanceMonitorProps {
   enableDeviceInfo?: boolean;
   enableNetworkInfo?: boolean;
@@ -20,8 +37,8 @@ export function PerformanceMonitor({
   enableNetworkInfo = false 
 }: PerformanceMonitorProps) {
   const [metrics, setMetrics] = useState<Partial<PerformanceMetrics>>({});
-  const [deviceInfo, setDeviceInfo] = useState<any>(null);
-  const [networkInfo, setNetworkInfo] = useState<any>(null);
+  const [deviceInfo, setDeviceInfo] = useState<DeviceInfo | null>(null);
+  const [networkInfo, setNetworkInfo] = useState<NetworkInfo | null>(null);
 
   useEffect(() => {
     // Web Vitals monitoring
@@ -68,7 +85,7 @@ export function PerformanceMonitor({
       const fidObserver = new PerformanceObserver((entryList) => {
         const entries = entryList.getEntries();
         entries.forEach(entry => {
-          const fidEntry = entry as any;
+          const fidEntry = entry as PerformanceEventTiming;
           if (fidEntry.processingStart) {
             const fid = fidEntry.processingStart - entry.startTime;
             setMetrics(prev => ({ ...prev, fid }));
@@ -86,7 +103,10 @@ export function PerformanceMonitor({
       const clsObserver = new PerformanceObserver((entryList) => {
         let clsValue = 0;
         entryList.getEntries().forEach(entry => {
-          const clsEntry = entry as any;
+          const clsEntry = entry as PerformanceEntry & { 
+            hadRecentInput?: boolean; 
+            value?: number; 
+          };
           if (!clsEntry.hadRecentInput) {
             clsValue += clsEntry.value || 0;
           }
@@ -141,7 +161,9 @@ export function PerformanceMonitor({
 
   useEffect(() => {
     if (enableNetworkInfo && 'connection' in navigator) {
-      const connection = (navigator as any).connection;
+      const connection = (navigator as Navigator & { 
+        connection: NetworkInfo 
+      }).connection;
       setNetworkInfo({
         effectiveType: connection.effectiveType,
         downlink: connection.downlink,
@@ -220,8 +242,9 @@ export function calculatePerformanceScore(metrics: Partial<PerformanceMetrics>):
 
 // Analytics helper for sending performance data
 export function sendPerformanceAnalytics(metrics: Partial<PerformanceMetrics>) {
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', 'web_vitals', {
+  const gtag = (window as Window & { gtag?: (...args: unknown[]) => void }).gtag;
+  if (typeof window !== 'undefined' && gtag) {
+    gtag('event', 'web_vitals', {
       event_category: 'Performance',
       event_label: 'Web Vitals',
       value: Math.round(calculatePerformanceScore(metrics)),

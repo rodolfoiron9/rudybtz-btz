@@ -13,7 +13,7 @@ interface AudioPlayerProps {
 export default function AudioPlayer({ src, title, className }: AudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [volume, setVolume] = useState(0.7);
+  const [volume, _setVolume] = useState(0.7); // TODO: Add volume control UI
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);

@@ -80,7 +80,7 @@ export default function PortfolioPage() {
                 Get In Touch
               </h2>
               <p className="text-lg text-foreground/70 mb-12 max-w-2xl mx-auto">
-                Ready to collaborate or want to book a show? Let's connect and create something amazing together.
+                Ready to collaborate or want to book a show? Let&apos;s connect and create something amazing together.
               </p>
               <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
                 <div className="glassmorphism bg-card/50 p-6 rounded-xl">

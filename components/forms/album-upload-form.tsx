@@ -7,17 +7,15 @@ import { Textarea } from '@/components/ui/textarea';
 import { AudioUpload, ImageUpload } from '@/components/ui/file-upload';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { 
   Music, 
   ImageIcon, 
   Save, 
   Loader2, 
-  CheckCircle2,
   AlertCircle,
-  Trash2,
-  Edit3
+  Trash2
 } from 'lucide-react';
+import Image from 'next/image';
 import { UploadResult, STORAGE_PATHS } from '@/lib/file-upload-service';
 
 interface AlbumFormData {
@@ -55,7 +53,7 @@ export function AlbumUploadForm({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({});
+  const [uploadProgress, _setUploadProgress] = useState<Record<string, number>>({}); // TODO: Implement progress UI
 
   const handleInputChange = (field: keyof AlbumFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -139,7 +137,7 @@ export function AlbumUploadForm({
     }
   };
 
-  const getTotalProgress = () => {
+  const _getTotalProgress = () => { // TODO: Use for progress UI
     const progressValues = Object.values(uploadProgress);
     if (progressValues.length === 0) return 0;
     return progressValues.reduce((sum, progress) => sum + progress, 0) / progressValues.length;
@@ -253,10 +251,12 @@ export function AlbumUploadForm({
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                 <div className="flex items-center space-x-3">
-                  <img
+                  <Image
                     src={formData.coverArt.downloadURL}
                     alt="Album cover"
-                    className="w-16 h-16 object-cover rounded-lg"
+                    width={64}
+                    height={64}
+                    className="object-cover rounded-lg"
                   />
                   <div>
                     <p className="font-medium">{formData.coverArt.fileName}</p>

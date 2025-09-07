@@ -134,7 +134,7 @@ export default function ThemeUITab() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-white">Theme & UI Design</h2>
-          <p className="text-gray-400">Customize your site's visual design and user interface</p>
+          <p className="text-gray-400">Customize your site&apos;s visual design and user interface</p>
         </div>
         <div className="flex space-x-2">
           {unsavedChanges && (

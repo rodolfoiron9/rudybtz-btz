@@ -19,7 +19,7 @@ import {
   formatFileSize,
   getFileTypeCategory,
   FILE_VALIDATIONS
-} from '@/src/lib/file-upload-service';
+} from '@/lib/file-upload-service';
 
 interface FileUploadProps {
   path: string;
@@ -310,7 +310,7 @@ export function FileUpload({
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Some files couldn't be uploaded. Check individual file errors above.
+            Some files couldn&apos;t be uploaded. Check individual file errors above.
           </AlertDescription>
         </Alert>
       )}

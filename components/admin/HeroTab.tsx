@@ -10,7 +10,7 @@ import { Plus, Edit, Trash2, Sparkles, Image as ImageIcon, Video, Upload } from 
 import { aiService } from '@/lib/ai-service';
 
 export default function HeroTab() {
-  const [slides, setSlides] = useState([
+  const slides = [
     {
       id: '1',
       title: 'Epic Music Journey',
@@ -25,7 +25,7 @@ export default function HeroTab() {
       mediaUrl: 'https://example.com/image1.jpg',
       order: 2
     }
-  ]);
+  ];
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: '',

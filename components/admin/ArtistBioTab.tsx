@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Plus, Edit, Trash2, Sparkles, Calendar, User2, Upload } from 'lucide-react';
+import Image from 'next/image';
 import { aiService } from '@/lib/ai-service';
 import type { ArtistBioEntry } from '@/lib/types';
 
@@ -288,7 +289,7 @@ export default function ArtistBioTab() {
               
               {bioEntries
                 .sort((a, b) => b.year - a.year)
-                .map((entry, index) => (
+                .map((entry) => (
                 <div key={entry.id} className="relative flex items-start space-x-6 pb-8">
                   {/* Timeline dot */}
                   <div className="relative z-10">
@@ -312,10 +313,12 @@ export default function ArtistBioTab() {
                       {/* Image */}
                       {entry.imageUrl && (
                         <div className="ml-6">
-                          <img 
+                          <Image 
                             src={entry.imageUrl} 
                             alt={entry.title}
-                            className="w-24 h-24 rounded-lg object-cover"
+                            width={96}
+                            height={96}
+                            className="rounded-lg object-cover"
                           />
                         </div>
                       )}
