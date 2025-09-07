@@ -8,7 +8,7 @@ import { Music, Play, Settings } from 'lucide-react';
 
 // Dynamic import to avoid SSR issues with 3D components
 const VisualizerPlayer = dynamic(
-  () => import('@/components/visualizer').then(mod => mod.VisualizerPlayer),
+  () => import('@/components/visualizer/simple-visualizer-player'),
   { 
     ssr: false,
     loading: () => (
