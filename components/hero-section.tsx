@@ -132,6 +132,7 @@ export default function HeroSection() {
             size="icon"
             onClick={togglePlayback}
             className="glassmorphism bg-white/10 hover:bg-white/20 border border-white/30 text-white"
+            aria-label={isPlaying ? 'Pause slideshow' : 'Play slideshow'}
           >
             {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
           </Button>

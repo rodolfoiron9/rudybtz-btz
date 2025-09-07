@@ -90,6 +90,7 @@ export default function AudioPlayer({ src, title, className }: AudioPlayerProps)
           variant="ghost"
           onClick={togglePlay}
           className="text-white hover:bg-purple-500/20"
+          aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
         >
           {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
         </Button>
@@ -112,6 +113,7 @@ export default function AudioPlayer({ src, title, className }: AudioPlayerProps)
           variant="ghost"
           onClick={toggleMute}
           className="text-white hover:bg-purple-500/20"
+          aria-label={isMuted ? 'Unmute audio' : 'Mute audio'}
         >
           {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
         </Button>
