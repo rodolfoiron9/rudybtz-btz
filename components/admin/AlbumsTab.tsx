@@ -7,8 +7,30 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { AlbumUploadForm } from '@/components/forms';
 import { Plus, Edit, Trash2, Music } from 'lucide-react';
+import Image from 'next/image';
 import { albumsService, tracksService } from '@/lib/services';
-import type { Album, Track } from '@/lib/types';
+import type { Album } from '@/lib/types';
+
+interface AlbumFormData {
+  title: string;
+  description: string;
+  releaseDate: string;
+  genre: string;
+  mood?: string;
+  coverArt?: {
+    downloadURL: string;
+    fileName: string;
+  };
+  tracks: TrackFormData[];
+}
+
+interface TrackFormData {
+  title: string;
+  audioFile?: {
+    downloadURL: string;
+    fileName: string;
+  };
+}
 
 export default function AlbumsTab() {
   const [albums, setAlbums] = useState<Album[]>([]);
@@ -42,7 +64,7 @@ export default function AlbumsTab() {
     }
   };
 
-  const handleSaveAlbum = async (albumData: any) => {
+  const handleSaveAlbum = async (albumData: AlbumFormData) => {
     try {
       if (selectedAlbum) {
         // Update existing album
@@ -53,7 +75,7 @@ export default function AlbumsTab() {
           genre: albumData.genre,
           mood: albumData.mood || '',
           coverArtUrl: albumData.coverArt?.downloadURL || '',
-          trackIds: albumData.tracks.map((track: any, index: number) => `${selectedAlbum.id}_track_${index}`)
+          trackIds: albumData.tracks.map((track: TrackFormData, index: number) => `${selectedAlbum.id}_track_${index}`)
         });
       } else {
         // Create new album
@@ -64,7 +86,7 @@ export default function AlbumsTab() {
           genre: albumData.genre,
           mood: albumData.mood || '',
           coverArtUrl: albumData.coverArt?.downloadURL || '',
-          trackIds: albumData.tracks.map((track: any, index: number) => `new_album_track_${index}`)
+          trackIds: albumData.tracks.map((track: TrackFormData, index: number) => `new_album_track_${index}`)
         });
 
         // Create tracks for the new album
@@ -96,7 +118,7 @@ export default function AlbumsTab() {
 
   const handleEdit = async (album: Album) => {
     setSelectedAlbum(album);
-    const tracks = await loadTracks(album.id);
+    const _tracks = await loadTracks(album.id); // TODO: Use tracks for editing
     setIsDialogOpen(true);
   };
 
@@ -213,10 +235,12 @@ export default function AlbumsTab() {
                   <TableRow key={album.id} className="border-gray-700">
                     <TableCell>
                       {album.coverArtUrl ? (
-                        <img 
+                        <Image 
                           src={album.coverArtUrl} 
                           alt={album.title}
-                          className="w-12 h-12 rounded-lg object-cover"
+                          width={48}
+                          height={48}
+                          className="rounded-lg object-cover"
                         />
                       ) : (
                         <div className="w-12 h-12 bg-gray-700 rounded-lg flex items-center justify-center">

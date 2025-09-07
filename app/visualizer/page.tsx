@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Music, Play, Settings } from 'lucide-react';
 
@@ -236,7 +235,7 @@ export default function VisualizerDemo() {
                     {/* Effects */}
                     <div className="flex flex-wrap gap-1">
                       {Object.entries(preset.effects)
-                        .filter(([_, enabled]) => enabled)
+                        .filter(([_effectName, enabled]) => enabled)
                         .map(([effect]) => (
                           <Badge key={effect} variant="secondary" className="text-xs">
                             {effect}

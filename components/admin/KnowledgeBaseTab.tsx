@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Edit, Trash2, Sparkles, Search, BookOpen, Tag, Brain, Upload } from 'lucide-react';
+import { Plus, Edit, Trash2, Sparkles, Search, BookOpen, Brain, Upload } from 'lucide-react';
 import { aiService } from '@/lib/ai-service';
 import type { KnowledgeBaseEntry } from '@/lib/types';
 
