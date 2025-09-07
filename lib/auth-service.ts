@@ -17,7 +17,7 @@ import {
   reauthenticateWithCredential,
   updatePassword
 } from 'firebase/auth';
-import { auth } from './firebase';
+import { auth, isDemoMode } from './firebase';
 
 export interface User {
   uid: string;
@@ -35,13 +35,19 @@ export interface AuthState {
 
 class AuthService {
   private authStateListeners: ((user: User | null) => void)[] = [];
+  private demoUser: User | null = null;
 
   constructor() {
-    // Initialize auth state listener
-    onAuthStateChanged(auth, (firebaseUser) => {
-      const user = firebaseUser ? this.mapFirebaseUser(firebaseUser) : null;
-      this.notifyAuthStateChange(user);
-    });
+    if (isDemoMode) {
+      // In demo mode, skip Firebase auth listener
+      console.log('Running in demo mode - Firebase authentication disabled');
+    } else {
+      // Initialize auth state listener only in production
+      onAuthStateChanged(auth, (firebaseUser) => {
+        const user = firebaseUser ? this.mapFirebaseUser(firebaseUser) : null;
+        this.notifyAuthStateChange(user);
+      });
+    }
   }
 
   /**
@@ -84,6 +90,20 @@ class AuthService {
    */
   async signInWithEmail(email: string, password: string): Promise<User> {
     try {
+      // In demo mode, simulate a successful login for any credentials
+      if (isDemoMode) {
+        const demoUser: User = {
+          uid: 'demo-admin-user',
+          email: email,
+          displayName: 'Demo Admin',
+          photoURL: null,
+          emailVerified: true
+        };
+        this.demoUser = demoUser;
+        this.notifyAuthStateChange(demoUser);
+        return demoUser;
+      }
+
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       return this.mapFirebaseUser(userCredential.user);
     } catch (error: any) {
@@ -130,6 +150,11 @@ class AuthService {
    */
   async signOut(): Promise<void> {
     try {
+      if (isDemoMode) {
+        this.demoUser = null;
+        this.notifyAuthStateChange(null);
+        return;
+      }
       await firebaseSignOut(auth);
     } catch (error: any) {
       throw new Error('Failed to sign out. Please try again.');
@@ -203,6 +228,11 @@ class AuthService {
    * Check if current user is admin (you can customize this logic)
    */
   async isAdmin(): Promise<boolean> {
+    // In demo mode, always allow admin access
+    if (isDemoMode) {
+      return true;
+    }
+
     const user = auth.currentUser;
     if (!user) return false;
 

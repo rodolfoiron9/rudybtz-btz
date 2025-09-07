@@ -27,6 +27,14 @@ export default function ProtectedRoute({
     const checkAuth = async () => {
       if (loading) return;
 
+      // In demo mode, allow access immediately
+      if (process.env.NODE_ENV === 'development' && 
+          process.env.NEXT_PUBLIC_FIREBASE_API_KEY === 'demo-api-key-for-development') {
+        setIsAdmin(true);
+        setChecking(false);
+        return;
+      }
+
       if (!user) {
         router.push(fallbackPath);
         return;
@@ -112,8 +120,10 @@ export default function ProtectedRoute({
     );
   }
 
-  // Show protected content for authenticated users
-  if (user && (!requireAdmin || isAdmin)) {
+  // Show protected content for authenticated users or demo mode
+  if ((user && (!requireAdmin || isAdmin)) || 
+      (process.env.NODE_ENV === 'development' && 
+       process.env.NEXT_PUBLIC_FIREBASE_API_KEY === 'demo-api-key-for-development')) {
     return <>{children}</>;
   }
 

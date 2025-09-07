@@ -29,6 +29,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
   });
 
   useEffect(() => {
+    // In demo mode, set a demo user and disable loading
+    if (process.env.NODE_ENV === 'development' && 
+        process.env.NEXT_PUBLIC_FIREBASE_API_KEY === 'demo-api-key-for-development') {
+      setAuthState({
+        user: {
+          uid: 'demo-admin-user',
+          email: 'admin@demo.com',
+          displayName: 'Demo Admin',
+          photoURL: null,
+          emailVerified: true
+        },
+        loading: false,
+        error: null
+      });
+      return;
+    }
+
     // Subscribe to auth state changes
     const unsubscribe = authService.onAuthStateChange((user) => {
       setAuthState(prev => ({
