@@ -15,10 +15,10 @@ describe('Utils Functions', () => {
       expect(formatDuration(60)).toBe('1:00')
     })
 
-    it('should handle invalid inputs gracefully', () => {
+    it('should throw an error for non-finite inputs', () => {
       expect(formatDuration(-1)).toBe('0:00')
-      expect(formatDuration(NaN)).toBe('0:00')
-      expect(formatDuration(Infinity)).toBe('0:00')
+      expect(() => formatDuration(NaN)).toThrow('Input must be a finite number.');
+      expect(() => formatDuration(Infinity)).toThrow('Input must be a finite number.');
     })
   })
 })
