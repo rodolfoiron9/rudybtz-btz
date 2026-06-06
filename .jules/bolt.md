@@ -1,0 +1,3 @@
+## 2025-05-14 - [InstancedMesh for R3F Visualizers]
+**Learning:** Rendering a grid of individual `THREE.Mesh` objects in React Three Fiber (R3F) causes a massive number of draw calls (O(n) where n = gridSize^2) and high CPU overhead due to individual object management and material cloning in every frame. Using `THREE.InstancedMesh` reduces this to a single draw call (O(1)) and allows for extremely efficient high-frequency updates via `setMatrixAt` and `setColorAt`.
+**Action:** Always prefer `instancedMesh` for rendering large numbers of identical geometries with different transformations or colors, especially in performance-critical paths like audio visualizers or particle systems. Use a dummy `Object3D` for matrix calculations to keep the code clean and fast.

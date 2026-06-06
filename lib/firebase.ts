@@ -18,6 +18,6 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase services
 export const db = getFirestore(app);
 export const storage = getStorage(app);
-export const auth = getAuth(app);
+export const auth = typeof window !== 'undefined' ? getAuth(app) : {} as any;
 
 export default app;
