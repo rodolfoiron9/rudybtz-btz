@@ -1,0 +1,3 @@
+## 2025-05-14 - [Optimize 3D visualizer with InstancedMesh and ref-based data]
+**Learning:** High-frequency updates (60fps) in React Three Fiber (R3F) should bypass React's state reconciliation to avoid significant CPU overhead. Using `instancedMesh` instead of individual mesh components drastically reduces draw calls, which is critical for performance in complex 3D scenes like audio visualizers.
+**Action:** Always use `useRef` for data that updates every frame (like audio analysis results) and `instancedMesh` for repeated geometries. Set `needsUpdate = true` on the instance attributes after manual modifications.
