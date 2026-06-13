@@ -1,0 +1,3 @@
+## 2025-05-14 - [Optimize 3D Visualizer with InstancedMesh and Ref-based updates]
+**Learning:** In high-frequency React Three Fiber applications (like audio visualizers running at 60fps), using React state for the animation loop causes excessive reconciliation overhead. Switching to `useRef` for data flow and `THREE.InstancedMesh` for rendering reduces draw calls from O(N^2) to O(1) and eliminates React re-renders, significantly improving performance.
+**Action:** Always prefer `InstancedMesh` for large groups of identical objects and use `useRef` to bypass React's state system for high-frequency (per-frame) updates in R3F.
