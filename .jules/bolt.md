@@ -1,0 +1,3 @@
+## 2026-06-15 - React Reconciliation vs. R3F Animation Loops
+**Learning:** React state updates (`useState`) in a high-frequency loop (60fps audio data) trigger full component reconciliation, which is extremely expensive for 3D scenes. Coupling this with individual `THREE.Mesh` objects leads to O(N^2) performance degradation (React overhead + WebGL draw calls).
+**Action:** Always decouple high-frequency data from React state using `useRef`. Use `InstancedMesh` to collapse O(N) or O(N^2) objects into a single draw call, and update them directly in the `useFrame` loop using `setMatrixAt` and `setColorAt` to bypass React entirely.
