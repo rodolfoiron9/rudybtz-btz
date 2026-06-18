@@ -1,0 +1,3 @@
+## 2026-06-18 - [Optimizing 3D Visualizers with InstancedMesh and Ref-based Updates]
+**Learning:** React state updates at 60fps cause massive performance degradation due to reconciliation overhead. Using `useRef` to store high-frequency data (like audio frequencies) and accessing it directly within the R3F `useFrame` loop bypasses React's render cycle entirely. Additionally, replacing individual meshes with `InstancedMesh` reduces draw calls from O(N) to O(1), which is critical for complex visualizations.
+**Action:** Always prefer `useRef` for data that updates every frame and use `InstancedMesh` for repetitive 3D objects.
