@@ -1,0 +1,3 @@
+## 2025-05-15 - [InstancedMesh and Ref-based Animation in R3F]
+**Learning:** In high-frequency React Three Fiber components (like audio visualizers), using React state for 60fps updates causes massive overhead due to reconciliation. Transitioning to `InstancedMesh` and `useRef` for imperative updates within `useFrame` reduces draw calls from O(N) to O(1) and eliminates re-renders. Manual loops for typed array analysis are significantly faster than `.reduce()` or `.slice()`.
+**Action:** Always prefer `InstancedMesh` for repeated geometries and `useRef` for data that updates every frame. Use manual loops for `Uint8Array` processing in hot paths.
