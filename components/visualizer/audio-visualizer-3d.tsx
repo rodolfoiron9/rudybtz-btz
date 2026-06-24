@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import * as THREE from 'three';
@@ -42,129 +42,134 @@ interface VisualizerPreset {
 }
 
 function VisualizerMesh({ audioData, preset }: VisualizerMeshProps) {
-  const groupRef = useRef<THREE.Group>(null);
-  const meshRefs = useRef<THREE.Mesh[]>([]);
-  const [meshes, setMeshes] = useState<THREE.Mesh[]>([]);
+  const meshRef = useRef<THREE.InstancedMesh>(null);
 
-  // Initialize meshes based on preset
-  useEffect(() => {
-    if (!groupRef.current) return;
+  // Reusable objects for performance
+  const dummy = useRef(new THREE.Object3D());
+  const color = useRef(new THREE.Color());
 
-    // Clear existing meshes
-    groupRef.current.clear();
-    meshRefs.current = [];
+  // Memory management: dispose geometry and material on unmount or preset change
+  const { geometry, material } = useMemo(() => {
+    const { type, colorScheme } = preset;
 
-    const newMeshes: THREE.Mesh[] = [];
-    const { gridSize, type, colorScheme } = preset;
-
-    // Create geometry based on type
-    let geometry: THREE.BufferGeometry;
+    let geo: THREE.BufferGeometry;
     switch (type) {
       case 'spheres':
-        geometry = new THREE.SphereGeometry(0.1, 8, 6);
+        geo = new THREE.SphereGeometry(0.1, 8, 6);
         break;
       case 'waves':
-        geometry = new THREE.PlaneGeometry(0.2, 0.2, 4, 4);
+        geo = new THREE.PlaneGeometry(0.2, 0.2, 4, 4);
         break;
       case 'particles':
-        geometry = new THREE.SphereGeometry(0.05, 4, 4);
+        geo = new THREE.SphereGeometry(0.05, 4, 4);
         break;
       default:
-        geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+        geo = new THREE.BoxGeometry(0.2, 0.2, 0.2);
     }
 
-    // Create material with preset colors
-    const material = new THREE.MeshPhongMaterial({
+    const mat = new THREE.MeshPhongMaterial({
       color: new THREE.Color(colorScheme.primary),
       transparent: true,
       opacity: 0.8,
     });
 
-    // Create grid of meshes
-    const spacing = 0.5;
-    const offset = (gridSize - 1) * spacing / 2;
+    return { geometry: geo, material: mat };
+  }, [preset.type, preset.colorScheme.primary]);
 
-    for (let x = 0; x < gridSize; x++) {
-      for (let z = 0; z < gridSize; z++) {
-        const mesh = new THREE.Mesh(geometry, material.clone());
-        mesh.position.set(
-          x * spacing - offset,
-          0,
-          z * spacing - offset
-        );
-        
-        groupRef.current.add(mesh);
-        newMeshes.push(mesh);
-        meshRefs.current.push(mesh);
-      }
-    }
-
-    setMeshes(newMeshes);
-
+  useEffect(() => {
     return () => {
       geometry.dispose();
       material.dispose();
     };
-  }, [preset]);
+  }, [geometry, material]);
 
   // Animate meshes based on audio data
   useFrame((state) => {
-    if (!audioData || !groupRef.current) return;
+    if (!audioData || !meshRef.current) return;
 
     const { frequencies, average, bass, mid, treble } = audioData;
     const time = state.clock.elapsedTime;
+    const { gridSize, effects, sensitivity, type } = preset;
+    const count = gridSize * gridSize;
 
-    meshRefs.current.forEach((mesh, index) => {
-      if (!mesh) return;
+    const spacing = 0.5;
+    const offset = (gridSize - 1) * spacing / 2;
 
-      // Calculate frequency band for this mesh
-      const frequencyIndex = Math.floor((index / meshRefs.current.length) * frequencies.length);
-      const frequency = frequencies[frequencyIndex] || 0;
-      const normalizedFreq = frequency / 255;
+    let index = 0;
+    for (let x = 0; x < gridSize; x++) {
+      for (let z = 0; z < gridSize; z++) {
+        const i = index++;
 
-      // Apply scaling based on frequency and preset sensitivity
-      if (preset.effects.scaling) {
-        const scale = 1 + normalizedFreq * 2;
-        mesh.scale.setY(scale);
-      }
+        // Calculate frequency band for this instance
+        const frequencyIndex = Math.floor((i / count) * frequencies.length);
+        const frequency = (frequencies[frequencyIndex] as number) || 0;
+        const normalizedFreq = frequency / 255;
 
-      // Apply rotation based on audio
-      if (preset.effects.rotation) {
-        mesh.rotation.y = time + normalizedFreq * Math.PI;
-      }
+        // Reset dummy
+        dummy.current.position.set(
+          x * spacing - offset,
+          0,
+          z * spacing - offset
+        );
+        dummy.current.rotation.set(0, 0, 0);
+        dummy.current.scale.set(1, 1, 1);
 
-      // Apply pulsing effect
-      if (preset.effects.pulsing) {
-        const pulse = Math.sin(time * 4 + index * 0.1) * 0.2 + 1;
-        mesh.scale.setX(pulse);
-        mesh.scale.setZ(pulse);
-      }
+        // Apply scaling
+        if (effects.scaling) {
+          const scaleY = 1 + normalizedFreq * 2;
+          dummy.current.scale.y = scaleY;
+        }
 
-      // Color modulation based on frequency bands
-      const material = mesh.material as THREE.MeshPhongMaterial;
-      if (material) {
-        const hue = (bass * preset.sensitivity.bass + 
-                     mid * preset.sensitivity.mid + 
-                     treble * preset.sensitivity.treble) / 765; // Max value for RGB
+        // Apply rotation
+        if (effects.rotation) {
+          dummy.current.rotation.y = time + normalizedFreq * Math.PI;
+        }
+
+        // Apply pulsing
+        if (effects.pulsing) {
+          const pulse = Math.sin(time * 4 + i * 0.1) * 0.2 + 1;
+          dummy.current.scale.x *= pulse;
+          dummy.current.scale.z *= pulse;
+        }
+
+        // Wave effect position modulation
+        if (type === 'waves') {
+          dummy.current.position.y = Math.sin(time * 2 + i * 0.2) * normalizedFreq * 2;
+        }
+
+        dummy.current.updateMatrix();
+        meshRef.current.setMatrixAt(i, dummy.current.matrix);
+
+        // Color modulation
+        const hue = (bass * sensitivity.bass +
+                     mid * sensitivity.mid +
+                     treble * sensitivity.treble) / 765;
         
-        material.color.setHSL(hue, 0.8, 0.6);
-        material.emissive.setHSL(hue, 0.5, normalizedFreq * 0.3);
+        color.current.setHSL(hue, 0.8, 0.6);
+        meshRef.current.setColorAt(i, color.current);
       }
+    }
 
-      // Position modulation for wave effect
-      if (preset.type === 'waves') {
-        mesh.position.y = Math.sin(time * 2 + index * 0.2) * normalizedFreq * 2;
-      }
-    });
+    // Flag for update
+    if (meshRef.current.instanceMatrix) {
+      meshRef.current.instanceMatrix.needsUpdate = true;
+    }
+    if (meshRef.current.instanceColor) {
+      meshRef.current.instanceColor.needsUpdate = true;
+    }
 
-    // Group rotation based on overall audio level
-    if (preset.effects.rotation) {
-      groupRef.current.rotation.y = time * 0.5 + average * 0.01;
+    // Overall rotation
+    if (effects.rotation) {
+      meshRef.current.rotation.y = time * 0.5 + average * 0.01;
     }
   });
 
   return (
-    <group ref={groupRef}>
+    <group>
+      <instancedMesh
+        ref={meshRef}
+        args={[geometry, material, preset.gridSize * preset.gridSize]}
+      />
       {/* Ambient lighting */}
       <ambientLight intensity={0.4} />
       
@@ -235,22 +240,43 @@ export default function AudioVisualizer3D({
     if (!analyserRef.current) return;
 
     const analyser = analyserRef.current;
-    const frequencies = new Uint8Array(analyser.frequencyBinCount);
-    const waveform = new Uint8Array(analyser.fftSize);
+    const frequencyBinCount = analyser.frequencyBinCount;
+    const fftSize = analyser.fftSize;
+
+    const frequencies = new Uint8Array(frequencyBinCount);
+    const waveform = new Uint8Array(fftSize);
 
     analyser.getByteFrequencyData(frequencies);
     analyser.getByteTimeDomainData(waveform);
 
-    // Calculate audio metrics
-    const average = frequencies.reduce((sum, value) => sum + value, 0) / frequencies.length;
+    // Calculate audio metrics using manual loops to avoid per-frame allocations from .reduce() and .slice()
+    let sum = 0;
+    for (let i = 0; i < frequencyBinCount; i++) {
+      sum += (frequencies[i] as number);
+    }
+    const average = sum / (frequencyBinCount || 1);
     
-    // Frequency bands (bass: 0-85Hz, mid: 85-255Hz, treble: 255Hz+)
-    const bassEnd = Math.floor(frequencies.length * 0.1);
-    const midEnd = Math.floor(frequencies.length * 0.3);
+    // Frequency bands (bass: 0-10%, mid: 10-30%, treble: 30%+)
+    const bassEnd = Math.floor(frequencyBinCount * 0.1);
+    const midEnd = Math.floor(frequencyBinCount * 0.3);
     
-    const bass = frequencies.slice(0, bassEnd).reduce((sum, value) => sum + value, 0) / bassEnd;
-    const mid = frequencies.slice(bassEnd, midEnd).reduce((sum, value) => sum + value, 0) / (midEnd - bassEnd);
-    const treble = frequencies.slice(midEnd).reduce((sum, value) => sum + value, 0) / (frequencies.length - midEnd);
+    let bassSum = 0;
+    for (let i = 0; i < bassEnd; i++) {
+      bassSum += (frequencies[i] as number);
+    }
+    const bass = bassSum / (bassEnd || 1);
+
+    let midSum = 0;
+    for (let i = bassEnd; i < midEnd; i++) {
+      midSum += (frequencies[i] as number);
+    }
+    const mid = midSum / (midEnd - bassEnd || 1);
+
+    let trebleSum = 0;
+    for (let i = midEnd; i < frequencyBinCount; i++) {
+      trebleSum += (frequencies[i] as number);
+    }
+    const treble = trebleSum / (frequencyBinCount - midEnd || 1);
 
     setAudioData({
       frequencies,
