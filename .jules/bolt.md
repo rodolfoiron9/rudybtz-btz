@@ -1,0 +1,3 @@
+## 2024-05-22 - [Optimized 3D Audio Visualizer]
+**Learning:** High-frequency React state updates (60fps) for audio data in a 3D scene (React Three Fiber) cause massive performance bottlenecks due to React's reconciliation cycle. Using individual meshes for grid elements leads to O(N²) draw calls.
+**Action:** Use `useRef` for high-frequency data (like audio analysis) and update the 3D scene imperatively within the `useFrame` loop. Implement `THREE.InstancedMesh` to reduce draw calls to O(1). Pre-allocate helper objects (e.g., `THREE.Object3D`, `THREE.Color`) outside the frame loop to prevent garbage collection pressure.
