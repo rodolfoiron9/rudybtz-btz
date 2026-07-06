@@ -1,0 +1,2 @@
+**Learning:** High-frequency visual updates in R3F (like 60fps audio data) should bypass React state to avoid reconciliation overhead. Using InstancedMesh instead of individual meshes reduces draw calls from O(N²) to O(1). Manual loops for audio analysis are significantly faster than functional array methods (.slice, .reduce) when run every frame.
+**Action:** Always use useRef for high-frequency data and InstancedMesh for repetitive 3D elements in performance-critical components.
