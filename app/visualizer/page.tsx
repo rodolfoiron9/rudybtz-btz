@@ -138,13 +138,10 @@ export default function VisualizerDemo() {
             </CardDescription>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="w-full h-80 bg-black rounded-lg flex items-center justify-center">
-              <div className="text-white/60 text-center">
-                <Music className="w-8 h-8 mx-auto mb-2 animate-pulse" />
-                <p>3D Visualizer Component Loading...</p>
-                <p className="text-sm mt-2 text-gray-400">WebGL + Audio API Integration</p>
-              </div>
-            </div>
+            <VisualizerPlayer
+              preset={selectedPreset}
+              className="w-full"
+            />
           </CardContent>
         </Card>
 
